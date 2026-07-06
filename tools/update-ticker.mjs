@@ -52,37 +52,43 @@ function parseEvents(data) {
             oppName: opp.team?.shortDisplayName || opp.team?.displayName || opp.team?.name || 'TBD',
             myScore: scoreOf(me),
             oppScore: scoreOf(opp),
+            clock: comp.status?.displayClock || comp.status?.type?.shortDetail || '',
         });
     }
     return out;
 }
 
 async function collect() {
-    const results = [], fixtures = [];
+    const results = [], fixtures = [], live = [];
     for (const lg of LEAGUES) {
         try {
             const done = await j(`https://site.api.espn.com/apis/site/v2/sports/soccer/${lg}/teams/${TEAM_ID}/schedule`);
-            results.push(...parseEvents(done).filter((e) => e.state === 'post'));
+            const ev = parseEvents(done);
+            results.push(...ev.filter((e) => e.state === 'post'));
+            live.push(...ev.filter((e) => e.state === 'in'));
         } catch (e) { console.error('results', lg, e.message); }
         try {
             const up = await j(`https://site.api.espn.com/apis/site/v2/sports/soccer/${lg}/teams/${TEAM_ID}/schedule?fixture=true`);
             fixtures.push(...parseEvents(up).filter((e) => e.state === 'pre'));
         } catch (e) { console.error('fixtures', lg, e.message); }
     }
-    return { results, fixtures };
+    return { results, fixtures, live };
 }
 
 const fmtDate = (d) => new Intl.DateTimeFormat('en-US', {
     weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York',
 }).format(d).replace(',', '') + ' ET';
 
-function buildTicker(results, fixtures) {
+function buildTicker(results, fixtures, live) {
     const parts = [];
+    // Live game takes top billing (updated every ~5 min while in progress)
+    const g = (live || []).sort((a, b) => b.date - a.date)[0];
+    if (g) parts.push(`● LIVE ${g.clock}: ${TEAM_NAME} ${g.myScore}–${g.oppScore} ${g.oppName}`);
     const last = results.sort((a, b) => b.date - a.date)[0];
     if (last) parts.push(`FT: ${TEAM_NAME} ${last.myScore}–${last.oppScore} ${last.oppName}`);
     const next = fixtures.filter((e) => e.date > new Date()).sort((a, b) => a.date - b.date)[0];
     if (next) parts.push(`Next: ${TEAM_NAME} ${next.home ? 'vs' : 'at'} ${next.oppName} · ${fmtDate(next.date)}`);
-    return { ticker: parts.join('  ◆  '), last, next };
+    return { ticker: parts.join('  ◆  '), last, next, live: !!g };
 }
 
 // --- Ghost Admin API ---
@@ -123,9 +129,9 @@ async function upsertPage(ticker) {
 }
 
 // --- main ---
-const { results, fixtures } = await collect();
-const { ticker, last, next } = buildTicker(results, fixtures);
-console.log('results:', results.length, '| fixtures:', fixtures.length);
+const { results, fixtures, live } = await collect();
+const { ticker } = buildTicker(results, fixtures, live);
+console.log('results:', results.length, '| fixtures:', fixtures.length, '| live:', live.length);
 console.log('ticker string:', ticker || '(empty)');
 if (!ticker) { console.log('No data — leaving Ghost unchanged.'); process.exit(0); }
 if (process.env.DRY_RUN === '1') { console.log('DRY_RUN — not writing to Ghost.'); process.exit(0); }

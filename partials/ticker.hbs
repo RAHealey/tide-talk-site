@@ -1,7 +1,6 @@
-{{! Top scarf ticker. On the homepage it scrolls the latest podcast episode plus
-{{! the auto-updated match line (from the hidden `match-ticker` page, written every
-{{! 2h by tools/update-ticker.mjs from ESPN's all-competitions feed). Other pages
-{{! show the static tagline. {{#get}} blocks are kept as siblings — never nested. }}
+{{!-- Top scarf ticker: on the homepage, latest podcast episode + auto-updated match
+line (from the hidden match-ticker page, written ~every 2h by tools/update-ticker.mjs
+from ESPN). Other pages show the static tagline. Get helpers are siblings, not nested. --}}
 <div class="scarf">
     <div class="track">
         {{#is "home"}}
