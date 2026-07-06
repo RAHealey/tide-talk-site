@@ -1,11 +1,18 @@
+{{! Included from default.hbs on every route. Only the homepage runs the posts query for }}
+{{! scrolling headlines; every other page shows the static tagline scarf (no DB hit). }}
 <div class="scarf">
     <div class="track">
-        {{#get "posts" limit="4" as |ticks|}}
-            {{#foreach ticks}}<span class="star">&#10022;</span><span><b>{{#if featured}}&#9733; {{/if}}{{title}}</b></span>{{/foreach}}
-            {{#foreach ticks}}<span class="star">&#10022;</span><span><b>{{#if featured}}&#9733; {{/if}}{{title}}</b></span>{{/foreach}}
+        {{#is "home"}}
+            {{#get "posts" limit="4" as |ticks|}}
+                {{#foreach ticks}}<span class="star">&#10022;</span><span><b>{{#if featured}}&#9733; {{/if}}{{title}}</b></span>{{/foreach}}
+                {{#foreach ticks}}<span class="star">&#10022;</span><span><b>{{#if featured}}&#9733; {{/if}}{{title}}</b></span>{{/foreach}}
+            {{else}}
+                <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>
+                <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>
+            {{/get}}
         {{else}}
             <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>
             <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>
-        {{/get}}
+        {{/is}}
     </div>
 </div>

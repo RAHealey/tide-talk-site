@@ -1,5 +1,8 @@
-{{! "Join the Tide" newsletter CTA. Replace the form below with your Beehiiv embed code, }}
-{{! or if Ghost members are enabled it falls back to the native Portal signup. }}
+{{! "Join the Tide" newsletter CTA. }}
+{{! - If Ghost members are enabled, uses the native Portal signup form. }}
+{{! - Otherwise, if @custom.newsletter_url (your Beehiiv subscribe page) is set, the }}
+{{!   form hands the email to Beehiiv in a new tab where the subscriber confirms. }}
+{{! - If neither is configured, no signup input is shown (rather than a dead form). }}
 <section class="join" id="newsletter">
     <div class="wrap">
         <div class="jcard">
@@ -17,11 +20,11 @@
                         </div>
                         <span class="fine">No spam. Unsubscribe anytime.</span>
                     </form>
-                {{else}}
-                    {{! ---- Beehiiv: paste your embed <iframe>/form here, then delete this placeholder form ---- }}
-                    <form action="#" method="post" onsubmit="return false">
+                {{else if @custom.newsletter_url}}
+                    {{! Beehiiv: submitting opens the subscribe page with the email prefilled for confirmation. }}
+                    <form action="{{@custom.newsletter_url}}" method="get" target="_blank" rel="noopener">
                         <div class="row">
-                            <input type="email" placeholder="you@email.com" aria-label="Email" required>
+                            <input type="email" name="email" placeholder="you@email.com" aria-label="Email" required>
                             <button type="submit">Sign Up</button>
                         </div>
                         <span class="fine">Powered by Beehiiv &middot; Unsubscribe anytime</span>

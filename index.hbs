@@ -32,7 +32,7 @@
             <div class="rgrid">
                 {{#foreach feed}}{{#has number="2,3,4"}}
                     <a class="cell" href="{{url}}">
-                        <div class="thumb" style="background-image:url({{img_url feature_image size="m"}})"></div>
+                        <div class="thumb"{{#if feature_image}} style="background-image:url({{img_url feature_image size="m"}})"{{/if}}></div>
                         <div class="cx">
                             <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
                             <h3>{{title}}</h3>
@@ -51,7 +51,7 @@
             <div class="cols">
                 {{#foreach feed}}{{#has number="5"}}
                     <a class="mainstory" href="{{url}}">
-                        <div class="fill" style="background-image:url({{img_url feature_image size="l"}})"></div>
+                        <div class="fill"{{#if feature_image}} style="background-image:url({{img_url feature_image size="l"}})"{{/if}}></div>
                         <div class="ht"></div>
                         <div class="scrim"></div>
                         <div class="c">
@@ -93,7 +93,7 @@
                 <div class="tapes">
                     {{#foreach eps}}
                         <a class="tape" href="{{url}}">
-                            <div class="cover" style="background-image:url({{img_url feature_image size="m"}})"></div>
+                            <div class="cover"{{#if feature_image}} style="background-image:url({{img_url feature_image size="m"}})"{{/if}}></div>
                             <div class="foot"><span class="ep">Episode</span><span class="lk">{{date format="MMM D"}}</span></div>
                         </a>
                     {{/foreach}}

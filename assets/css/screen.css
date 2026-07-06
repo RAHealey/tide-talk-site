@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
-
-
-
+/* Fonts are loaded via <link> in default.hbs <head> (preconnect + parallel fetch) rather
+   than a render-blocking CSS @import. */
 
 
 :root{
@@ -11,6 +9,7 @@
   --ink2:#0a1a30;
   --tide:#2f8fce;
   --tide-bright:#5fb2e2;
+  --tide-deep:#1f6fa8;
   --gold:#e79a06;
   --gold-bright:#fbad18;
   --muted:#6a6350;
@@ -77,16 +76,9 @@ nav.main a.on{background:var(--gold-bright);color:var(--ink)}
 .poster .kick{display:inline-block;font-family:var(--sans);font-weight:900;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
   background:var(--gold-bright);color:var(--ink);padding:7px 14px;margin-bottom:24px;transform:rotate(-2deg)}
 .poster h1{font-family:var(--sans);font-weight:900;font-size:clamp(48px,8.5vw,108px);line-height:.85;letter-spacing:-.035em;text-transform:uppercase;text-wrap:balance}
-.poster h1 .o{color:transparent;-webkit-text-stroke:2.5px var(--paper)}
-.poster h1 .g{color:var(--gold-bright)}
-.poster h1 .t{color:var(--tide-bright)}
 .poster .foot{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-top:34px;flex-wrap:wrap}
 .poster .deck{font-family:var(--serif);font-style:italic;font-size:22px;color:#d6dfea;max-width:40ch;line-height:1.35}
 .poster .by{font-family:var(--sans);font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tide-bright);white-space:nowrap}
-.scoretab{position:absolute;top:26px;right:26px;background:var(--paper);color:var(--ink);border-radius:5px;
-  padding:12px 16px;text-align:center;transform:rotate(3deg);box-shadow:5px 5px 0 rgba(0,0,0,.25);z-index:3}
-.scoretab .s{font-family:var(--sans);font-weight:900;font-size:26px;font-variant-numeric:tabular-nums;line-height:1}
-.scoretab .l{font-family:var(--sans);font-weight:800;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 
 /* result strip */
 .results{padding:26px 0}
@@ -220,14 +212,6 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 .prose a{color:var(--tide-deep);text-decoration:underline;text-underline-offset:3px}
 .pullq{border-left:6px solid var(--gold-bright);padding:4px 0 4px 24px;margin:34px 0;font-family:var(--sans);font-weight:900;font-size:28px;line-height:1.1;text-transform:uppercase;letter-spacing:-.02em}
 .pullq .t{color:var(--tide-deep)}
-.scoreline{background:var(--ink);color:var(--paper);border-radius:8px;padding:20px 24px;margin:32px 0;display:flex;align-items:center;justify-content:center;gap:22px;font-family:var(--sans);flex-wrap:wrap}
-.scoreline .tm{font-weight:800;font-size:16px;display:flex;align-items:center;gap:10px}
-.scoreline .cr{width:34px;height:34px;border-radius:7px;display:grid;place-items:center;font-weight:900;font-size:12px}
-.scoreline .cr.h{background:linear-gradient(135deg,#1a4d7d,#0a1c33);color:var(--tide-bright)}
-.scoreline .cr.a{background:#16294a;color:var(--paper)}
-.scoreline .sc{font-weight:900;font-size:30px;font-variant-numeric:tabular-nums}
-.scoreline .sc em{color:var(--muted);font-style:normal;margin:0 8px}
-.scoreline .ft{font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--gold-bright);text-transform:uppercase}
 .tags{display:flex;flex-wrap:wrap;gap:10px;margin:36px 0}
 .tags a{font-family:var(--sans);font-weight:800;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--ink);border-radius:100px;padding:7px 14px}
 .tags a:hover{background:var(--gold-bright)}
@@ -280,8 +264,6 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
   .poster .kick{font-size:11px}
   .poster .deck{font-size:18px}
   .hero-shot .shot{min-height:0;aspect-ratio:1/1}
-  .scoretab{top:14px;right:14px;padding:9px 12px}
-  .scoretab .s{font-size:20px}
   /* result strip: single column, contained image height */
   .results{padding:20px 0}
   .rgrid{grid-template-columns:1fr}
@@ -322,8 +304,6 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
   .prose .lead::first-letter{font-size:60px}
   .pullq{font-size:23px}
   .prose h2{font-size:22px}
-  .scoreline{gap:14px 18px;padding:18px}
-  .scoreline .sc{font-size:26px}
   .related .rgrid{grid-template-columns:1fr}
 }
 
@@ -362,21 +342,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 
 
 @media(max-width:560px){
-  .pods{padding:32px 0}
-  .tapes{gap:14px}
-  /* newsletter */
-  .join{padding:12px 0 40px}
-  .jcard .inner{padding:32px 26px}
-  .join h2{font-size:32px}
-  .join .row{flex-direction:column}
-  .join button{padding:15px 20px}
-  /* footer */
-  footer{padding:38px 0 30px}
-  .ftop{flex-direction:column;gap:26px}
-  .fcols{gap:36px}
-  .fbrand .wordmark{width:170px;height:56px}
-  .fbot{flex-direction:column;gap:8px}
-  /* podcast */
+  /* podcast page (shared mobile rules live in the earlier 560px block) */
   .feature-ep{grid-template-columns:1fr;gap:18px;padding:16px}
   .feature-ep .cover{max-width:260px}
   .epdetails h3{font-size:26px}

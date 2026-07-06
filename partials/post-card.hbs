@@ -1,5 +1,5 @@
 <a class="pcard" href="{{url}}">
-    <div class="thumb" style="background-image:url({{img_url feature_image size="m"}})"></div>
+    <div class="thumb"{{#if feature_image}} style="background-image:url({{img_url feature_image size="m"}})"{{/if}}></div>
     <div class="b">
         <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
         <h3>{{title}}</h3>

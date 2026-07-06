@@ -7,7 +7,7 @@
         <div class="crumb">&#10022; {{#if primary_tag}}{{primary_tag.name}}{{else}}{{@site.title}}{{/if}}</div>
         <h1 class="arttitle">{{title}}</h1>
         <div class="artmeta">
-            <span class="av" {{#if primary_author.profile_image}}style="background-image:url({{img_url primary_author.profile_image size="xs"}});background-size:cover"{{/if}}></span>
+            <span class="av" {{#if primary_author.profile_image}}style="background-image:url({{img_url primary_author.profile_image size="xs"}});background-size:cover"{{/if}}></span>{{! xs = 100px, defined in package.json image_sizes }}
             <div>
                 <div class="who">{{primary_author.name}}</div>
                 <div class="sub">{{date format="MMMM D, YYYY"}} &middot; {{reading_time}}</div>
@@ -50,8 +50,13 @@
                 {{comments title=""}}
             {{else}}
                 <div class="cbox">
-                    <p>Comments are for Tide Talk members. Sign in or become a member &mdash; it's free &mdash; to share your take.</p>
-                    <a href="#/portal/signup" data-portal="signup">Sign in to comment</a>
+                    {{#if @site.members_enabled}}
+                        <p>Comments are for Tide Talk members. Sign in or become a member &mdash; it's free &mdash; to share your take.</p>
+                        <a href="#/portal/signup" data-portal="signup">Sign in to comment</a>
+                    {{else}}
+                        <p>Join the Tide and get every reaction, rating and roster take straight to your inbox.</p>
+                        <a href="#newsletter">Get the newsletter</a>
+                    {{/if}}
                 </div>
             {{/if}}
         </div>
@@ -66,7 +71,7 @@
                         <div class="rgrid">
                             {{#foreach related}}
                                 <a class="cell" href="{{url}}">
-                                    <div class="thumb" style="background-image:url({{img_url feature_image size="m"}})"></div>
+                                    <div class="thumb"{{#if feature_image}} style="background-image:url({{img_url feature_image size="m"}})"{{/if}}></div>
                                     <div class="cx">
                                         <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{/if}}</div>
                                         <h3>{{title}}</h3>
