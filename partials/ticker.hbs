@@ -1,14 +1,13 @@
-{{! Included from default.hbs on every route. Only the homepage runs the posts query for }}
-{{! scrolling headlines; every other page shows the static tagline scarf (no DB hit). }}
+{{! Top scarf ticker. On the homepage it scrolls: latest podcast episode (dynamic) +
+{{! latest result + next match (set in Ghost Admin -> Settings -> Design -> theme settings,
+{{! since Ghost has no fixtures feed). Other pages show the static tagline scarf. }}
 <div class="scarf">
     <div class="track">
         {{#is "home"}}
-            {{#get "posts" limit="4" as |ticks|}}
-                {{#foreach ticks}}<span class="star">&#10022;</span><span><b>{{#if featured}}&#9733; {{/if}}{{title}}</b></span>{{/foreach}}
-                {{#foreach ticks}}<span class="star">&#10022;</span><span><b>{{#if featured}}&#9733; {{/if}}{{title}}</b></span>{{/foreach}}
-            {{else}}
-                <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>
-                <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>
+            {{#get "posts" filter="tag:podcast" limit="1" as |ep|}}
+                {{! --- segment (rendered twice for a seamless loop) --- }}
+                {{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{/if}}{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{#unless ep}}<span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span>{{/unless}}
+                {{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{/if}}{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{#unless ep}}<span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span>{{/unless}}
             {{/get}}
         {{else}}
             <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>

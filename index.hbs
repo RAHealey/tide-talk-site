@@ -51,7 +51,8 @@
             <div class="cols">
                 {{#foreach feed}}{{#has number="5"}}
                     <a class="mainstory" href="{{url}}">
-                        <div class="fill"{{#if feature_image}} style="background-image:url({{img_url feature_image size="l"}})"{{/if}}></div>
+                        {{! stand-in gradient (in CSS) — never the real feature image, which has baked-in text that clashes with the overlaid headline }}
+                        <div class="fill"></div>
                         <div class="ht"></div>
                         <div class="scrim"></div>
                         <div class="c">

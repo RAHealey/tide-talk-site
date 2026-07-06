@@ -49,7 +49,7 @@ a{color:inherit;text-decoration:none}
 .logo{display:flex;align-items:center;gap:14px}
 .logo .mark{width:58px;height:58px;background-size:contain;background-repeat:no-repeat;background-position:center}
 .logo .name{font-family:var(--sans);font-weight:900;font-size:38px;letter-spacing:-.03em;line-height:.85}
-.logo .wm{width:156px;height:46px;background-size:contain;background-repeat:no-repeat;background-position:left center}
+.logo .wm{display:inline-block;width:156px;height:46px;background-size:contain;background-repeat:no-repeat;background-position:left center}
 .logo .est{font-family:var(--sans);font-weight:800;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:5px}
 .mrow .rhs{text-align:right}
 .stamp{display:inline-block;font-family:var(--sans);font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
