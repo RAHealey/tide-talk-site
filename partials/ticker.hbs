@@ -1,17 +1,15 @@
 {{! Top scarf ticker. On the homepage it scrolls: latest podcast episode (dynamic) +
-{{! match info. Match info prefers the manual theme settings (matchday_result / next_match,
-{{! for USL Cup games ESPN doesn't cover); otherwise it uses the auto-updated `match-ticker`
-{{! page written daily by tools/update-ticker.mjs. Other pages show the static tagline. }}
+{{! match info. Match info prefers the manual theme settings (matchday_result /
+{{! next_match); otherwise it uses the auto-updated `match-ticker` page written by
+{{! tools/update-ticker.mjs. Other pages show the static tagline.
+{{! NOTE: {{#get}} blocks are kept SIBLINGS, never nested — nested {{#get}} does not
+{{! resolve reliably in Ghost. }}
 <div class="scarf">
     <div class="track">
         {{#is "home"}}
-            {{#get "posts" filter="tag:podcast" limit="1" as |ep|}}
-            {{#get "pages" filter="slug:match-ticker" limit="1" as |md|}}
-                {{! --- segment (rendered twice for a seamless loop) --- }}
-                {{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{/if}}{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{#unless @custom.matchday_result}}{{#unless @custom.next_match}}{{#foreach md}}{{#if custom_excerpt}}<span class="t">&#9670;</span><span><b>{{custom_excerpt}}</b></span>{{/if}}{{/foreach}}{{/unless}}{{/unless}}
-                {{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{/if}}{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{#unless @custom.matchday_result}}{{#unless @custom.next_match}}{{#foreach md}}{{#if custom_excerpt}}<span class="t">&#9670;</span><span><b>{{custom_excerpt}}</b></span>{{/if}}{{/foreach}}{{/unless}}{{/unless}}
-            {{/get}}
-            {{/get}}
+            {{! ----- segment, rendered twice for a seamless loop ----- }}
+            {{#get "posts" filter="tag:podcast" limit="1" as |ep|}}{{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{/get}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{else}}{{#get "pages" filter="slug:match-ticker" limit="1" as |md|}}{{#foreach md}}<span class="t">&#9670;</span><span><b>{{custom_excerpt}}</b></span>{{/foreach}}{{/get}}{{/if}}
+            {{#get "posts" filter="tag:podcast" limit="1" as |ep|}}{{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{/get}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{else}}{{#get "pages" filter="slug:match-ticker" limit="1" as |md|}}{{#foreach md}}<span class="t">&#9670;</span><span><b>{{custom_excerpt}}</b></span>{{/foreach}}{{/get}}{{/if}}
         {{else}}
             <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>
             <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>
