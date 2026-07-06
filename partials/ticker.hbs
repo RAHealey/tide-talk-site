@@ -1,13 +1,16 @@
 {{! Top scarf ticker. On the homepage it scrolls: latest podcast episode (dynamic) +
-{{! latest result + next match (set in Ghost Admin -> Settings -> Design -> theme settings,
-{{! since Ghost has no fixtures feed). Other pages show the static tagline scarf. }}
+{{! match info. Match info prefers the manual theme settings (matchday_result / next_match,
+{{! for USL Cup games ESPN doesn't cover); otherwise it uses the auto-updated `match-ticker`
+{{! page written daily by tools/update-ticker.mjs. Other pages show the static tagline. }}
 <div class="scarf">
     <div class="track">
         {{#is "home"}}
             {{#get "posts" filter="tag:podcast" limit="1" as |ep|}}
+            {{#get "pages" filter="slug:match-ticker" limit="1" as |md|}}
                 {{! --- segment (rendered twice for a seamless loop) --- }}
-                {{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{/if}}{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{#unless ep}}<span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span>{{/unless}}
-                {{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{/if}}{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{#unless ep}}<span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span>{{/unless}}
+                {{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{/if}}{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{#unless @custom.matchday_result}}{{#unless @custom.next_match}}{{#foreach md}}{{#if custom_excerpt}}<span class="t">&#9670;</span><span><b>{{custom_excerpt}}</b></span>{{/if}}{{/foreach}}{{/unless}}{{/unless}}
+                {{#foreach ep}}<span class="star">&#10022;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{#if @custom.matchday_result}}<span class="t">&#9670;</span><span><b>{{@custom.matchday_result}}</b></span>{{/if}}{{#if @custom.next_match}}<span class="t">&#9670;</span><span><b>Next &mdash; {{@custom.next_match}}</b></span>{{/if}}{{#unless @custom.matchday_result}}{{#unless @custom.next_match}}{{#foreach md}}{{#if custom_excerpt}}<span class="t">&#9670;</span><span><b>{{custom_excerpt}}</b></span>{{/if}}{{/foreach}}{{/unless}}{{/unless}}
+            {{/get}}
             {{/get}}
         {{else}}
             <span class="star">&#10022;</span><span><b>{{@custom.ticker_tagline}}</b></span><span class="t">&#9670;</span><span><b>{{@site.title}}</b></span>

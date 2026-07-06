@@ -1,0 +1,23 @@
+name: Update match ticker
+
+# Runs every 2 hours so match-day results/fixtures are always fresh within a
+# couple hours of a final whistle; on quiet days it just re-confirms the next
+# fixture (the write is idempotent). Also triggerable manually.
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Update RIFC ticker in Ghost
+        env:
+          GHOST_ADMIN_KEY: ${{ secrets.GHOST_ADMIN_KEY }}
+          GHOST_URL: https://casual-macaque.pikapod.net
+        run: node tools/update-ticker.mjs
