@@ -1,0 +1,87 @@
+{{!< default}}
+
+{{#post}}
+<article class="artpage">
+
+    <div class="artwrap">
+        <div class="crumb">&#10022; {{#if primary_tag}}{{primary_tag.name}}{{else}}{{@site.title}}{{/if}}</div>
+        <h1 class="arttitle">{{title}}</h1>
+        <div class="artmeta">
+            <span class="av" {{#if primary_author.profile_image}}style="background-image:url({{img_url primary_author.profile_image size="xs"}});background-size:cover"{{/if}}></span>
+            <div>
+                <div class="who">{{primary_author.name}}</div>
+                <div class="sub">{{date format="MMMM D, YYYY"}} &middot; {{reading_time}}</div>
+            </div>
+            <div class="share">
+                <a href="https://twitter.com/intent/tweet?text={{encode title}}&amp;url={{url absolute="true"}}" target="_blank" rel="noopener" aria-label="Share on X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.3 8.3L23 22h-6.8l-5.3-6.9L4.8 22H1.7l7.8-8.9L1 2h7l4.8 6.4L18.9 2zm-1.2 18h1.7L7.4 3.8H5.6L17.7 20z"/></svg></a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{url absolute="true"}}" target="_blank" rel="noopener" aria-label="Share on Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.2c-1.2 0-1.6.8-1.6 1.5V12h2.7l-.4 2.9h-2.3v7A10 10 0 0022 12z"/></svg></a>
+            </div>
+        </div>
+    </div>
+
+    {{#if feature_image}}
+        <div class="artwrap">
+            <figure class="feature-img"><div class="fi" style="background-image:url({{img_url feature_image size="l"}})"></div></figure>
+            {{#if feature_image_caption}}<div class="feature-cap">{{feature_image_caption}}</div>{{else}}<div class="feature-cap">{{#if primary_tag}}{{primary_tag.name}}{{/if}}</div>{{/if}}
+        </div>
+    {{/if}}
+
+    <div class="artwrap prose">
+        {{content}}
+
+        {{#if tags}}
+            <div class="tags">
+                {{#foreach tags}}{{#unless internal}}<a href="{{url}}">{{name}}</a>{{/unless}}{{/foreach}}
+            </div>
+        {{/if}}
+
+        <div class="authorbox">
+            <span class="ba" {{#if primary_author.profile_image}}style="background-image:url({{img_url primary_author.profile_image size="s"}});background-size:cover"{{/if}}></span>
+            <div>
+                <h4>{{primary_author.name}}</h4>
+                <div class="r">{{#if primary_author.location}}{{primary_author.location}} &middot; {{/if}}Tide Talk</div>
+                <p>{{#if primary_author.bio}}{{primary_author.bio}}{{else}}Contributor at {{@site.title}}, independent Rhode Island FC coverage &mdash; content by fans, for fans.{{/if}}</p>
+            </div>
+        </div>
+
+        <div class="comments">
+            <h3>Join the conversation</h3>
+            {{#if @site.comments_enabled}}
+                {{comments title=""}}
+            {{else}}
+                <div class="cbox">
+                    <p>Comments are for Tide Talk members. Sign in or become a member &mdash; it's free &mdash; to share your take.</p>
+                    <a href="#/portal/signup" data-portal="signup">Sign in to comment</a>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+
+    {{#if primary_tag}}
+        {{#get "posts" filter="tag:{{primary_tag.slug}}+id:-{{id}}" limit="3" include="authors,tags" as |related|}}
+            {{#if related}}
+                <div class="related">
+                    <div class="wrap">
+                        <div class="banner"><span class="flag"><span>Read Next</span></span><h2>More {{primary_tag.name}}</h2><span class="rule"></span></div>
+                        <div class="rgrid">
+                            {{#foreach related}}
+                                <a class="cell" href="{{url}}">
+                                    <div class="thumb" style="background-image:url({{img_url feature_image size="m"}})"></div>
+                                    <div class="cx">
+                                        <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{/if}}</div>
+                                        <h3>{{title}}</h3>
+                                        <div class="m">{{primary_author.name}} &middot; {{date format="MMM D"}}</div>
+                                    </div>
+                                </a>
+                            {{/foreach}}
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+        {{/get}}
+    {{/if}}
+
+</article>
+{{/post}}
+
+{{> newsletter}}

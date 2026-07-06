@@ -1,0 +1,23 @@
+<header class="masthead">
+    <div class="wrap">
+        <input type="checkbox" id="navtoggle" class="navtoggle" aria-label="Toggle menu">
+        <div class="mrow">
+            <a class="logo" href="{{@site.url}}">
+                <span class="mark" role="img" aria-label="{{@site.title}} crest"></span>
+                <div>
+                    <span class="wm" role="img" aria-label="{{@site.title}}"></span>
+                    <div class="est">For the Fans, By the Fans &middot; Est. 2024</div>
+                </div>
+            </a>
+            <div class="rhs">
+                {{#if @site.members_enabled}}
+                    <a class="stamp" href="#/portal/signup" data-portal="signup">&#9993; Subscribe</a>
+                {{else}}
+                    <a class="stamp" href="#newsletter">&#9993; Subscribe</a>
+                {{/if}}
+                <label for="navtoggle" class="hamburger" aria-label="Open menu"><span></span><span></span><span></span></label>
+            </div>
+        </div>
+        {{navigation}}
+    </div>
+</header>

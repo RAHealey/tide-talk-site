@@ -1,0 +1,23 @@
+{{!< default}}
+
+{{#author}}
+<section class="archead">
+    <div class="wrap">
+        <div class="banner"><span class="flag"><span>Writer</span></span><h2>{{name}}</h2><span class="rule"></span></div>
+        {{#if bio}}<p class="archdesc">{{bio}}</p>{{/if}}
+    </div>
+</section>
+{{/author}}
+
+<section class="archwrap">
+    <div class="wrap">
+        <div class="cardgrid">
+            {{#foreach posts}}
+                {{> post-card}}
+            {{/foreach}}
+        </div>
+        {{pagination}}
+    </div>
+</section>
+
+{{> newsletter}}

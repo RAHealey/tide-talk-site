@@ -1,0 +1,33 @@
+{{! "Join the Tide" newsletter CTA. Replace the form below with your Beehiiv embed code, }}
+{{! or if Ghost members are enabled it falls back to the native Portal signup. }}
+<section class="join" id="newsletter">
+    <div class="wrap">
+        <div class="jcard">
+            <div class="ht"></div>
+            <div class="inner">
+                <div>
+                    <h2>Join the Tide</h2>
+                    <p>Reactions, ratings and roster chaos &mdash; free in your inbox every week. From the fans who never miss a kick.</p>
+                </div>
+                {{#if @site.members_enabled}}
+                    <form data-members-form="subscribe">
+                        <div class="row">
+                            <input data-members-email type="email" placeholder="you@email.com" aria-label="Email" required>
+                            <button type="submit">Sign Up</button>
+                        </div>
+                        <span class="fine">No spam. Unsubscribe anytime.</span>
+                    </form>
+                {{else}}
+                    {{! ---- Beehiiv: paste your embed <iframe>/form here, then delete this placeholder form ---- }}
+                    <form action="#" method="post" onsubmit="return false">
+                        <div class="row">
+                            <input type="email" placeholder="you@email.com" aria-label="Email" required>
+                            <button type="submit">Sign Up</button>
+                        </div>
+                        <span class="fine">Powered by Beehiiv &middot; Unsubscribe anytime</span>
+                    </form>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>

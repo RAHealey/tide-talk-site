@@ -1,0 +1,106 @@
+{{!< default}}
+
+{{#get "posts" limit="8" include="authors,tags" as |feed|}}
+
+    {{! ---------- HERO: newest post ---------- }}
+    <section class="hero">
+        <div class="wrap hero-2">
+            {{#foreach feed}}{{#has number="1"}}
+                <div class="poster">
+                    <div class="tex"></div>
+                    <div class="halftone"></div>
+                    <div class="inner">
+                        <span class="kick">&#9733; {{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</span>
+                        <h1><a href="{{url}}">{{title}}</a></h1>
+                        <p class="deck">{{excerpt characters="150"}}</p>
+                        <span class="by">{{primary_author.name}} &middot; {{date format="MMMM D, YYYY"}}</span>
+                    </div>
+                </div>
+                {{#if feature_image}}
+                    <figure class="hero-shot">
+                        <div class="shot" style="background-image:url({{img_url feature_image size="l"}})"></div>
+                        <figcaption>{{#if primary_tag}}{{primary_tag.name}}{{else}}Featured{{/if}} &middot; {{@site.title}}</figcaption>
+                    </figure>
+                {{/if}}
+            {{/has}}{{/foreach}}
+        </div>
+    </section>
+
+    {{! ---------- STORY STRIP: posts 2-4 ---------- }}
+    <section class="results">
+        <div class="wrap">
+            <div class="rgrid">
+                {{#foreach feed}}{{#has number="2,3,4"}}
+                    <a class="cell" href="{{url}}">
+                        <div class="thumb" style="background-image:url({{img_url feature_image size="m"}})"></div>
+                        <div class="cx">
+                            <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
+                            <h3>{{title}}</h3>
+                            <div class="m">{{primary_author.name}} &middot; {{date format="MMM D"}}</div>
+                        </div>
+                    </a>
+                {{/has}}{{/foreach}}
+            </div>
+        </div>
+    </section>
+
+    {{! ---------- THE LATEST: main + side ---------- }}
+    <section class="latest">
+        <div class="wrap">
+            <div class="banner"><span class="flag"><span>Off the Pitch</span></span><h2>The Latest</h2><span class="rule"></span></div>
+            <div class="cols">
+                {{#foreach feed}}{{#has number="5"}}
+                    <a class="mainstory" href="{{url}}">
+                        <div class="fill" style="background-image:url({{img_url feature_image size="l"}})"></div>
+                        <div class="ht"></div>
+                        <div class="scrim"></div>
+                        <div class="c">
+                            <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
+                            <h3>{{title}}</h3>
+                            <p>{{excerpt characters="120"}}</p>
+                        </div>
+                    </a>
+                {{/has}}{{/foreach}}
+                <div class="sidelist">
+                    {{#foreach feed}}{{#has number="6,7,8"}}
+                        <a class="item" href="{{url}}">
+                            <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
+                            <h4>{{title}}</h4>
+                            <div class="m">{{primary_author.name}} &middot; {{date format="MMM D"}}</div>
+                        </a>
+                    {{/has}}{{/foreach}}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{{/get}}
+
+{{! ---------- QUOTE BAND ---------- }}
+<section class="chant">
+    <div class="wrap">
+        <blockquote>Content by fans, <span class="g">for the fans.</span></blockquote>
+        <cite>&mdash; {{@site.title}}</cite>
+    </div>
+</section>
+
+{{! ---------- PODCAST STRIP ---------- }}
+{{#get "posts" filter="tag:podcast" limit="4" include="tags" as |eps|}}
+    {{#if eps}}
+        <section class="pods">
+            <div class="wrap">
+                <div class="banner"><span class="flag" style="background:var(--tide-bright)"><span>Listen</span></span><h2>Tide Talk Podcast</h2><span class="rule"></span></div>
+                <div class="tapes">
+                    {{#foreach eps}}
+                        <a class="tape" href="{{url}}">
+                            <div class="cover" style="background-image:url({{img_url feature_image size="m"}})"></div>
+                            <div class="foot"><span class="ep">Episode</span><span class="lk">{{date format="MMM D"}}</span></div>
+                        </a>
+                    {{/foreach}}
+                </div>
+            </div>
+        </section>
+    {{/if}}
+{{/get}}
+
+{{> newsletter}}

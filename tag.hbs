@@ -1,0 +1,23 @@
+{{!< default}}
+
+{{#tag}}
+<section class="archead">
+    <div class="wrap">
+        <div class="banner"><span class="flag"><span>Section</span></span><h2>{{name}}</h2><span class="rule"></span></div>
+        {{#if description}}<p class="archdesc">{{description}}</p>{{/if}}
+    </div>
+</section>
+{{/tag}}
+
+<section class="archwrap">
+    <div class="wrap">
+        <div class="cardgrid">
+            {{#foreach posts}}
+                {{> post-card}}
+            {{/foreach}}
+        </div>
+        {{pagination}}
+    </div>
+</section>
+
+{{> newsletter}}
