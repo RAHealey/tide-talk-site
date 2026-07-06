@@ -1,0 +1,5 @@
+<nav class="pagination" role="navigation" aria-label="Pagination">
+    {{#if pagination.prev}}<a class="pg" href="{{page_url pagination.prev}}">&larr; Newer</a>{{else}}<span class="pg disabled">&larr; Newer</span>{{/if}}
+    <span class="pgnum">Page {{pagination.page}} of {{pagination.pages}}</span>
+    {{#if pagination.next}}<a class="pg" href="{{page_url pagination.next}}">Older &rarr;</a>{{else}}<span class="pg disabled">Older &rarr;</span>{{/if}}
+</nav>

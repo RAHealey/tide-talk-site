@@ -1,0 +1,22 @@
+{{!< default}}
+
+{{#post}}
+<article class="artpage">
+    {{#if @page.show_title_and_feature_image}}
+        <div class="artwrap">
+            <div class="crumb">&#10022; {{@site.title}}</div>
+            <h1 class="arttitle">{{title}}</h1>
+        </div>
+        {{#if feature_image}}
+            <div class="artwrap">
+                <figure class="feature-img"><div class="fi" style="background-image:url({{img_url feature_image size="l"}})"></div></figure>
+            </div>
+        {{/if}}
+    {{/if}}
+    <div class="artwrap prose">
+        {{content}}
+    </div>
+</article>
+{{/post}}
+
+{{> newsletter}}

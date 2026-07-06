@@ -1,0 +1,43 @@
+{{!< default}}
+{{! Custom template — assign a Page to "Podcast" in the editor's template dropdown. }}
+
+{{#post}}
+<section class="podpage">
+    <div class="wrap">
+        <div class="banner"><span class="flag"><span>The Podcast</span></span><h2>{{title}}</h2><span class="rule"></span></div>
+        {{#if html}}<div class="showblurb">{{content}}</div>{{/if}}
+
+        <div class="platforms">
+            <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-3 19.5c0-.7 0-1.4.2-2 .2-.9 1.3-5.6 1.3-5.6a2.6 2.6 0 01-.2-1.1c0-1 .6-1.8 1.4-1.8.6 0 1 .5 1 1.1 0 .7-.5 1.7-.7 2.7-.2.8.4 1.5 1.2 1.5 1.5 0 2.5-1.9 2.5-4.1 0-1.7-1.1-3-3.2-3a3.6 3.6 0 00-3.8 3.6c0 .7.3 1.2.6 1.6l-.3 1c0 .3-.2.3-.5.2-1.2-.5-1.8-1.9-1.8-3.4 0-2.5 1.9-4.9 5.6-4.9 2.9 0 4.9 2.1 4.9 4.4 0 3-1.7 5.3-4.1 5.3-.8 0-1.6-.5-1.9-1l-.5 2c-.2.7-.6 1.6-1 2.2A10 10 0 1012 2z"/></svg>Apple Podcasts</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm4.6 14.4a.6.6 0 01-.9.2c-2.4-1.5-5.4-1.8-9-1a.6.6 0 11-.3-1.2c3.9-.9 7.3-.5 10 1.1.3.2.4.6.2.9zm1.2-2.7a.8.8 0 01-1 .3c-2.7-1.7-6.9-2.2-10.1-1.2a.8.8 0 11-.5-1.5c3.7-1.1 8.3-.6 11.4 1.4.3.2.5.7.2 1zm.1-2.8C14.6 8.9 9.4 8.7 6.3 9.6a.9.9 0 11-.6-1.8c3.6-1 9.3-.8 13 1.4a.9.9 0 01-1 1.6z"/></svg>Spotify</a>
+            <a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.2-.4-4.7a2.5 2.5 0 00-1.7-1.7C19.4 5.2 12 5.2 12 5.2s-7.4 0-8.9.4A2.5 2.5 0 001.4 7.3C1 8.8 1 12 1 12s0 3.2.4 4.7a2.5 2.5 0 001.7 1.7c1.5.4 8.9.4 8.9.4s7.4 0 8.9-.4a2.5 2.5 0 001.7-1.7C23 15.2 23 12 23 12zM9.8 15.3V8.7l6 3.3-6 3.3z"/></svg>YouTube</a>
+        </div>
+
+        {{! One query feeds both the featured latest episode (@first) and the archive grid (the rest). }}
+        {{#get "posts" filter="tag:podcast" limit="13" as |eps|}}
+            {{#foreach eps}}{{#if @first}}
+                <div class="feature-ep">
+                    <div class="cover"{{#if feature_image}} style="background-image:url({{img_url feature_image size="m"}})"{{/if}}></div>
+                    <div class="epdetails">
+                        <div class="k">Latest Episode</div>
+                        <h3>{{title}}</h3>
+                        <p>{{excerpt characters="200"}}</p>
+                        <div class="eplinks"><a href="{{url}}">Listen &rarr;</a></div>
+                    </div>
+                </div>
+
+                <div class="banner"><span class="flag" style="background:var(--tide-bright)"><span>Archive</span></span><h2>All Episodes</h2><span class="rule"></span></div>
+                <div class="ep-grid">
+            {{else}}
+                    <a class="epcard" href="{{url}}">
+                        <div class="cv"{{#if feature_image}} style="background-image:url({{img_url feature_image size="m"}})"{{/if}}></div>
+                        <div class="ef"><span class="ep">Episode</span><span class="dt">{{date format="MMM D"}}</span></div>
+                    </a>
+            {{/if}}{{/foreach}}
+            {{#if eps}}</div>{{/if}}
+        {{/get}}
+    </div>
+</section>
+{{/post}}
+
+{{> newsletter}}
