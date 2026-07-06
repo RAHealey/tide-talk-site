@@ -37,15 +37,7 @@
       },
       "newsletter_url": {
         "type": "text",
-        "description": "Your Beehiiv subscribe page URL (e.g. https://tidetalk.beehiiv.com/subscribe). Used by the 'Join the Tide' signup form when Ghost members are disabled."
-      },
-      "matchday_result": {
-        "type": "text",
-        "description": "Latest result shown in the top ticker, e.g. 'FT: RIFC 1-1 Orange County SC'. Update after each match."
-      },
-      "next_match": {
-        "type": "text",
-        "description": "Next fixture shown in the top ticker, e.g. 'RIFC vs Louisville City - Sat Jul 11, 7:30pm ET'."
+        "description": "Your Beehiiv subscribe page URL. Used by the 'Join the Tide' form when Ghost members are off."
       }
     }
   }
