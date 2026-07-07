@@ -74,7 +74,8 @@
       },
       "contact_url": {
         "type": "text",
-        "description": "Contact link (footer More) — e.g. mailto:hello@tidetalkri.com or a contact page URL. Hidden if blank."
+        "default": "mailto:ryan@tidetalkri.com",
+        "description": "Contact link (footer More) — e.g. mailto:ryan@tidetalkri.com or a contact page URL. Hidden if blank."
       }
     }
   }
