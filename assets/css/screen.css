@@ -157,7 +157,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 .ftop{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;border-bottom:1px solid #24406a;padding-bottom:26px}
 .fbrand .lg{font-weight:900;font-size:28px;color:var(--paper);letter-spacing:-.02em}
 .fbrand .wordmark{width:200px;height:66px;background-size:contain;background-repeat:no-repeat;background-position:left center}
-.fbrand p{font-size:13px;margin-top:8px;max-width:32ch;line-height:1.5}
+.fbrand p{font-size:13px;margin-top:8px;max-width:32ch;line-height:1.5;margin-left:17px}
 .fcols{display:flex;gap:50px}
 .fcols h5{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:12px}
 .fcols a{display:block;color:#a9bcd4;font-size:13.5px;margin-bottom:9px}
@@ -298,6 +298,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
   .ftop{flex-direction:column;gap:26px}
   .fcols{gap:36px}
   .fbrand .wordmark{width:170px;height:56px}
+  .fbrand p{margin-left:14px}
   .fbot{flex-direction:column;gap:8px}
   /* article */
   .artwrap{padding:0 18px}
