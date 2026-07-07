@@ -31,10 +31,6 @@
         "type": "text",
         "default": "Tide Talk was founded under the key principle of creating content for the fans, by the fans."
       },
-      "ticker_tagline": {
-        "type": "text",
-        "default": "Content by fans, for fans"
-      },
       "newsletter_url": {
         "type": "text",
         "description": "Your Beehiiv subscribe page URL. Used by the 'Join the Tide' form when Ghost members are off."
