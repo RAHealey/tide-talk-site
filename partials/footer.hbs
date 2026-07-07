@@ -20,9 +20,9 @@
                 </div>
                 <div>
                     <h5>More</h5>
-                    <a href="{{@site.url}}/about/">About</a>
+                    <a href="{{@site.url}}/about-us/">About</a>
                     {{#if @custom.store_url}}<a href="{{@custom.store_url}}" target="_blank" rel="noopener">Store</a>{{/if}}
-                    <a href="{{@site.url}}/contact/">Contact</a>
+                    {{#if @custom.contact_url}}<a href="{{@custom.contact_url}}">Contact</a>{{/if}}
                 </div>
             </div>
         </div>

@@ -71,6 +71,10 @@
       "store_url": {
         "type": "text",
         "description": "Merch store URL (footer More)."
+      },
+      "contact_url": {
+        "type": "text",
+        "description": "Contact link (footer More) — e.g. mailto:hello@tidetalkri.com or a contact page URL. Hidden if blank."
       }
     }
   }
