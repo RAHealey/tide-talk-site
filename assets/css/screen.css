@@ -39,6 +39,7 @@ a{color:inherit;text-decoration:none}
 .scarf .track b{color:var(--gold-bright)}
 .scarf .track .t{color:var(--tide-bright)}
 .scarf .track .star{color:var(--tide-bright)}
+.scarf .track .cry b{color:var(--tide-bright);letter-spacing:.2em}
 @keyframes tscroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.scarf .track{animation:none}}
 
