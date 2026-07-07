@@ -14,9 +14,9 @@
 
     {{!-- Default social-share image. {{ghost_head}} emits a post's own feature image
     after this, so posts still share with their graphic; this is the fallback. --}}
-    <meta property="og:image" content="{{asset "images/share-card.png" absolute="true"}}">
+    <meta property="og:image" content="{{@site.url}}{{asset "images/share-card.png"}}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{{asset "images/share-card.png" absolute="true"}}">
+    <meta name="twitter:image" content="{{@site.url}}{{asset "images/share-card.png"}}">
 
     {{ghost_head}}
 </head>
