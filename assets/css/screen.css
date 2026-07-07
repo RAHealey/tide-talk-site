@@ -168,7 +168,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 .fbot .socials a:hover{color:var(--tide-bright)}
 
 /* --- F2: real imagery --- */
-.hero-2{display:grid;grid-template-columns:1.12fr .88fr;gap:22px;align-items:stretch}
+.hero-2{display:grid;grid-template-columns:1fr;gap:22px;align-items:stretch}
 .hero-2 .poster{height:100%}
 .hero-2 .poster h1{font-size:clamp(40px,5.2vw,72px)}
 .hero-2 .poster .deck{margin-top:26px}

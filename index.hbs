@@ -16,12 +16,6 @@
                         <span class="by">{{primary_author.name}} &middot; {{date format="MMMM D, YYYY"}}</span>
                     </div>
                 </div>
-                {{#if feature_image}}
-                    <figure class="hero-shot">
-                        <div class="shot" style="background-image:url({{img_url feature_image size="l"}})"></div>
-                        <figcaption>{{#if primary_tag}}{{primary_tag.name}}{{else}}Featured{{/if}} &middot; {{@site.title}}</figcaption>
-                    </figure>
-                {{/if}}
             {{/has}}{{/foreach}}
         </div>
     </section>
