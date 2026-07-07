@@ -12,12 +12,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
     <link rel="stylesheet" type="text/css" href="{{asset "css/screen.css"}}">
 
-    {{!-- Default social-share image. {{ghost_head}} emits a post's own feature image
-    after this, so posts still share with their graphic; this is the fallback. --}}
-    <meta property="og:image" content="{{@site.url}}{{asset "images/share-card.png"}}">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{{@site.url}}{{asset "images/share-card.png"}}">
-
+    {{!-- Social-share tags (og:image, twitter:card, etc.) come from {{ghost_head}}:
+    the Publication cover is the site-wide default; posts use their own feature image. --}}
     {{ghost_head}}
 </head>
 <body class="{{body_class}}">
