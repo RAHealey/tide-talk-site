@@ -12,6 +12,27 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
     <link rel="stylesheet" type="text/css" href="{{asset "css/screen.css"}}">
 
+    {{!-- Entity/News schema: tells Google "Tide Talk" is a news org covering RIFC, with these socials. --}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NewsMediaOrganization",
+        "name": "Tide Talk",
+        "alternateName": ["Tide Talk RI", "Tide Talk Rhode Island FC"],
+        "url": "{{@site.url}}/",
+        "logo": "{{@site.logo}}",
+        "description": "Independent, fan-run news, analysis and podcast coverage of Rhode Island FC (RIFC), the USL Championship soccer club in Rhode Island.",
+        "knowsAbout": ["Rhode Island FC", "RIFC", "USL Championship soccer", "Soccer in Rhode Island"],
+        "sameAs": [
+            "https://www.instagram.com/tidetalkri/",
+            "https://twitter.com/TideTalkRI",
+            "https://www.youtube.com/@TideTalkRI",
+            "https://open.spotify.com/show/0P3cNx3nSFLcu6Xr095I4G",
+            "https://www.facebook.com/profile.php?id=61556290666031"
+        ]
+    }
+    </script>
+
     {{!-- Social-share tags (og:image, twitter:card, etc.) come from {{ghost_head}}:
     the Publication cover is the site-wide default; posts use their own feature image. --}}
     {{ghost_head}}
