@@ -234,6 +234,8 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 @media(max-width:700px){
   .masthead .wrap{padding:16px 18px}
   .mrow .rhs{display:flex;align-items:center;gap:10px}
+  .masthead .stamp{display:none}   /* drop Subscribe on mobile — leave just the hamburger, no squish */
+  .hero-shot{display:none}          /* drop the 2nd hero image (baked-in-text feature graphic) on phones */
   .hamburger{display:flex;flex-direction:column;justify-content:center;gap:5px;width:46px;height:42px;border:2.5px solid var(--ink);border-radius:7px;background:var(--paper2);cursor:pointer;padding:0 10px;flex:0 0 auto}
   .hamburger span{display:block;height:3px;background:var(--ink);border-radius:2px}
   nav.main{margin-top:16px;flex-direction:column;display:none}
