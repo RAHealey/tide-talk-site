@@ -22,7 +22,7 @@
                     <h5>More</h5>
                     <a href="{{@site.url}}/about-us/">About</a>
                     {{#if @custom.store_url}}<a href="{{@custom.store_url}}" target="_blank" rel="noopener">Store</a>{{/if}}
-                    {{#if @custom.contact_url}}<a href="{{@custom.contact_url}}">Contact</a>{{/if}}
+                    <a href="{{#if @custom.contact_url}}{{@custom.contact_url}}{{else}}mailto:ryan@tidetalkri.com{{/if}}">Contact</a>
                 </div>
             </div>
         </div>
