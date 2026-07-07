@@ -38,6 +38,39 @@
       "newsletter_url": {
         "type": "text",
         "description": "Your Beehiiv subscribe page URL. Used by the 'Join the Tide' form when Ghost members are off."
+      },
+      "apple_podcasts_url": {
+        "type": "text",
+        "description": "Apple Podcasts show URL (footer Listen)."
+      },
+      "spotify_url": {
+        "type": "text",
+        "default": "https://open.spotify.com/show/0P3cNx3nSFLcu6Xr095I4G",
+        "description": "Spotify podcast show URL (footer Listen + socials)."
+      },
+      "youtube_url": {
+        "type": "text",
+        "default": "https://www.youtube.com/@TideTalkRI",
+        "description": "YouTube channel URL (footer Listen + socials)."
+      },
+      "instagram_url": {
+        "type": "text",
+        "default": "https://www.instagram.com/tidetalkri/",
+        "description": "Instagram profile URL (footer socials)."
+      },
+      "x_url": {
+        "type": "text",
+        "default": "https://twitter.com/TideTalkRI",
+        "description": "X / Twitter profile URL (footer socials)."
+      },
+      "facebook_url": {
+        "type": "text",
+        "default": "https://www.facebook.com/profile.php?id=61556290666031",
+        "description": "Facebook page URL (footer socials)."
+      },
+      "store_url": {
+        "type": "text",
+        "description": "Merch store URL (footer More)."
       }
     }
   }

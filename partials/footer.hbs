@@ -15,21 +15,27 @@
                 </div>
                 <div>
                     <h5>Listen</h5>
-                    <a href="#">Apple Podcasts</a>
-                    <a href="#">Spotify</a>
-                    <a href="#">YouTube</a>
+                    {{#if @custom.apple_podcasts_url}}<a href="{{@custom.apple_podcasts_url}}" target="_blank" rel="noopener">Apple Podcasts</a>{{/if}}
+                    {{#if @custom.spotify_url}}<a href="{{@custom.spotify_url}}" target="_blank" rel="noopener">Spotify</a>{{/if}}
+                    {{#if @custom.youtube_url}}<a href="{{@custom.youtube_url}}" target="_blank" rel="noopener">YouTube</a>{{/if}}
                 </div>
                 <div>
                     <h5>More</h5>
                     <a href="{{@site.url}}/about/">About</a>
-                    <a href="#">Store</a>
+                    {{#if @custom.store_url}}<a href="{{@custom.store_url}}" target="_blank" rel="noopener">Store</a>{{/if}}
                     <a href="{{@site.url}}/contact/">Contact</a>
                 </div>
             </div>
         </div>
         <div class="fbot">
             <span>&copy; {{date format="YYYY"}} {{@site.title}}</span>
-            <span>Instagram &middot; X &middot; YouTube &middot; Spotify</span>
+            <span class="socials">
+                {{#if @custom.instagram_url}}<a href="{{@custom.instagram_url}}" target="_blank" rel="noopener">Instagram</a>{{/if}}
+                {{#if @custom.x_url}}<a href="{{@custom.x_url}}" target="_blank" rel="noopener">X</a>{{/if}}
+                {{#if @custom.youtube_url}}<a href="{{@custom.youtube_url}}" target="_blank" rel="noopener">YouTube</a>{{/if}}
+                {{#if @custom.spotify_url}}<a href="{{@custom.spotify_url}}" target="_blank" rel="noopener">Spotify</a>{{/if}}
+                {{#if @custom.facebook_url}}<a href="{{@custom.facebook_url}}" target="_blank" rel="noopener">Facebook</a>{{/if}}
+            </span>
         </div>
     </div>
 </footer>

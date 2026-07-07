@@ -163,6 +163,9 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 .fcols a{display:block;color:#a9bcd4;font-size:13.5px;margin-bottom:9px}
 .fcols a:hover{color:var(--tide-bright)}
 .fbot{margin-top:22px;display:flex;justify-content:space-between;color:#7f93b0;font-size:12px}
+.fbot .socials{display:inline-flex;gap:16px;flex-wrap:wrap;justify-content:flex-end}
+.fbot .socials a{color:inherit}
+.fbot .socials a:hover{color:var(--tide-bright)}
 
 /* --- F2: real imagery --- */
 .hero-2{display:grid;grid-template-columns:1.12fr .88fr;gap:22px;align-items:stretch}
