@@ -49,8 +49,8 @@ a{color:inherit;text-decoration:none}
 .logo{display:flex;align-items:center;gap:14px}
 .logo .mark{width:58px;height:58px;background-size:contain;background-repeat:no-repeat;background-position:center}
 .logo .name{font-family:var(--sans);font-weight:900;font-size:38px;letter-spacing:-.03em;line-height:.85}
-.logo .wm{display:inline-block;width:156px;height:46px;background-size:contain;background-repeat:no-repeat;background-position:left center}
-.logo .est{font-family:var(--sans);font-weight:800;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.logo .wm{display:block;width:156px;height:42px;background-size:contain;background-repeat:no-repeat;background-position:left bottom}
+.logo .est{font-family:var(--sans);font-weight:800;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:1px}
 .mrow .rhs{text-align:right}
 .stamp{display:inline-block;font-family:var(--sans);font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--ink);border:2.5px solid var(--ink);padding:8px 13px;transform:rotate(-4deg);border-radius:4px;transition:background .15s ease,color .15s ease}
@@ -201,7 +201,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 .artmeta .share a:hover{background:var(--ink);color:var(--paper2)}
 .artmeta .share svg{width:16px;height:16px}
 .feature-img{border:4px solid var(--ink);border-radius:6px;overflow:hidden;box-shadow:6px 6px 0 rgba(10,26,48,.15);margin:0}
-.feature-img .fi{aspect-ratio:16/10;background-size:cover;background-position:center}
+.feature-img .fi{aspect-ratio:1/1;background-size:cover;background-position:center}
 .feature-cap{font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.02em;margin:10px 0 34px}
 .prose{font-family:var(--serif);font-size:20px;line-height:1.62}
 .prose p{margin-bottom:22px}
@@ -372,6 +372,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 .prose blockquote{border-left:6px solid var(--gold-bright);margin:30px 0;padding:6px 0 6px 24px;font-style:italic;font-size:22px;color:var(--ink)}
 .prose hr{border:0;border-top:3px solid var(--ink);margin:36px 0}
 .prose .kg-card,.prose .kg-embed-card,.prose .kg-bookmark-card{margin:30px 0}
+.prose .kg-embed-card iframe,.prose iframe[src*="youtube"],.prose iframe[src*="videopress"]{width:100%;height:auto;aspect-ratio:16/9;border:0;display:block}
 .prose iframe{max-width:100%}
 
 /* ===== archives ===== */
@@ -381,7 +382,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 .cardgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .pcard{border:3px solid var(--ink);border-radius:8px;overflow:hidden;background:var(--paper2);display:flex;flex-direction:column;transition:transform .15s ease,box-shadow .15s ease}
 .pcard:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
-.pcard .thumb{aspect-ratio:16/10;background-size:cover;background-position:center;background-color:var(--ink2);border-bottom:3px solid var(--ink)}
+.pcard .thumb{aspect-ratio:1/1;background-size:cover;background-position:center;background-color:var(--ink2);border-bottom:3px solid var(--ink)}
 .pcard .b{padding:18px 20px;flex:1}
 .pcard .k{font-family:var(--sans);font-weight:900;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--tide);margin-bottom:8px}
 .pcard h3{font-family:var(--sans);font-weight:800;font-size:19px;line-height:1.1;letter-spacing:-.01em}
