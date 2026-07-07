@@ -1,11 +1,11 @@
 name: Update match ticker
 
-# Runs every 2 hours so match-day results/fixtures are always fresh within a
-# couple hours of a final whistle; on quiet days it just re-confirms the next
-# fixture (the write is idempotent). Also triggerable manually.
+# Runs every 5 minutes so an in-progress RIFC match shows a near-live score in
+# the ticker (public repo = free unlimited minutes). The updater only writes to
+# Ghost when the value actually changes, so quiet runs are cheap no-ops.
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch: {}
 
 jobs:

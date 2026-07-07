@@ -106,9 +106,10 @@ const gh = (path, opts = {}) => fetch(GHOST_URL + path, {
 });
 
 async function upsertPage(ticker) {
-    const g = await gh('/ghost/api/admin/pages/slug/match-ticker/?fields=id,updated_at');
+    const g = await gh('/ghost/api/admin/pages/slug/match-ticker/?fields=id,updated_at,custom_excerpt');
     if (g.status === 200) {
         const p = (await g.json()).pages[0];
+        if (p.custom_excerpt === ticker) { console.log('unchanged — skipping write'); return 200; }
         const r = await gh(`/ghost/api/admin/pages/${p.id}/?source=html`, {
             method: 'PUT',
             body: JSON.stringify({ pages: [{ updated_at: p.updated_at, custom_excerpt: ticker, status: 'published' }] }),
