@@ -7,8 +7,7 @@
         <div class="wrap hero-2">
             {{#get "pages" filter="slug:youtube-live+title:live" limit="1" as |ytlive|}}{{#foreach ytlive}}
                 <div class="livehero">
-                    <div class="livetop"><span class="livebadge">&#9679; LIVE</span><span class="livenow">Tide Talk is live on YouTube</span></div>
-                    <div class="livevid"><iframe src="https://www.youtube.com/embed/{{excerpt}}?autoplay=1&mute=1&playsinline=1" title="Tide Talk Live" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="eager"></iframe></div>
+                    <div class="livevid"><span class="livebadge">&#9679; LIVE</span><iframe src="https://www.youtube.com/embed/{{excerpt}}?autoplay=1&mute=1&playsinline=1" title="Tide Talk Live" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="eager"></iframe></div>
                     <a class="chatbtn" href="https://www.youtube.com/watch?v={{excerpt}}" target="_blank" rel="noopener">&#128172; Join the chat on YouTube</a>
                 </div>
             {{/foreach}}{{/get}}
