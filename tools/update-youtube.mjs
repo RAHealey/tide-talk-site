@@ -17,8 +17,10 @@ const GH = () => ({ Authorization: 'Ghost ' + tok(), 'Accept-Version': 'v5.0', '
 const etParts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false, weekday: 'short', month: 'short', day: 'numeric' }).formatToParts(new Date());
 const et = Object.fromEntries(etParts.map(p => [p.type, p.value]));
 const H = parseInt(et.hour, 10), M = parseInt(et.minute, 10);
-const doLive = H >= 18 && H <= 22;                    // 6:00–10:59pm ET: watch for going live/off
-const doUpcoming = (H >= 15 && H <= 22) && (M % 30 < 5); // ~every 30 min from 3pm: catch scheduled shows
+// GitHub throttles the schedule to ~90min, so check on EVERY evening run (not a minute gate).
+// Quota stays tiny because runs are sparse; graceful no-op on API errors either way.
+const doLive = H >= 17 && H <= 23;      // 5pm–11:59pm ET: watch for going live / off
+const doUpcoming = H >= 13 && H <= 23;  // 1pm–11:59pm ET: catch a scheduled show for the countdown
 console.log(`ET ${et.weekday} ${et.hour}:${et.minute} — liveCheck=${doLive} upcomingCheck=${doUpcoming}`);
 
 async function ytSearch(eventType) {
