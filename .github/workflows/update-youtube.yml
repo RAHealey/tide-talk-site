@@ -1,0 +1,24 @@
+name: Update YouTube live status
+
+# Checks the Tide Talk YouTube channel for a live / scheduled-upcoming broadcast and
+# updates the hidden "youtube-live" Ghost page, which drives the live hero + ticker alert.
+# Runs every 5 min (public repo = free minutes); the script itself only calls the YouTube
+# API during evening ET windows (shows are ~8:30pm) and only writes to Ghost on a change.
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Update YouTube live status in Ghost
+        env:
+          GHOST_ADMIN_KEY: ${{ secrets.GHOST_ADMIN_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node tools/update-youtube.mjs
