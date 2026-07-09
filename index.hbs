@@ -2,21 +2,31 @@
 
 {{#get "posts" limit="8" include="authors,tags" as |feed|}}
 
-    {{! ---------- HERO: newest post ---------- }}
+    {{! ---------- HERO: live YouTube show when we're on air, else newest post ---------- }}
     <section class="hero">
         <div class="wrap hero-2">
-            {{#foreach feed}}{{#has number="1"}}
-                <div class="poster">
-                    <div class="tex"></div>
-                    <div class="halftone"></div>
-                    <div class="inner">
-                        <span class="kick">&#9733; {{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</span>
-                        <h1><a href="{{url}}">{{title}}</a></h1>
-                        <p class="deck">{{excerpt characters="280"}}</p>
-                        <span class="by">{{primary_author.name}} &middot; {{date format="MMMM D, YYYY"}}</span>
+            {{#get "pages" filter="slug:youtube-live+title:live" limit="1" as |ytlive|}}
+                {{#foreach ytlive}}
+                    <div class="livehero">
+                        <div class="livetop"><span class="livebadge">&#9679; LIVE</span><span class="livenow">Tide Talk is live on YouTube</span></div>
+                        <div class="livevid"><iframe src="https://www.youtube.com/embed/{{excerpt}}?autoplay=1&mute=1&playsinline=1" title="Tide Talk Live" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="eager"></iframe></div>
+                        <a class="chatbtn" href="https://www.youtube.com/watch?v={{excerpt}}" target="_blank" rel="noopener">&#128172; Join the chat on YouTube</a>
                     </div>
-                </div>
-            {{/has}}{{/foreach}}
+                {{/foreach}}
+            {{else}}
+                {{#foreach feed}}{{#has number="1"}}
+                    <div class="poster">
+                        <div class="tex"></div>
+                        <div class="halftone"></div>
+                        <div class="inner">
+                            <span class="kick">&#9733; {{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</span>
+                            <h1><a href="{{url}}">{{title}}</a></h1>
+                            <p class="deck">{{excerpt characters="280"}}</p>
+                            <span class="by">{{primary_author.name}} &middot; {{date format="MMMM D, YYYY"}}</span>
+                        </div>
+                    </div>
+                {{/has}}{{/foreach}}
+            {{/get}}
         </div>
     </section>
 

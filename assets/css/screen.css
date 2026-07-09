@@ -169,6 +169,18 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 
 /* --- F2: real imagery --- */
 .hero-2{display:grid;grid-template-columns:1fr;gap:22px;align-items:stretch}
+/* live YouTube hero + ticker alert */
+.livehero{position:relative;border:3px solid var(--ink);border-radius:6px;overflow:hidden;background:var(--navy);padding:16px}
+.livetop{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.livebadge{display:inline-flex;align-items:center;gap:6px;background:#e01b1b;color:#fff;font-family:var(--sans);font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:4px;animation:livepulse 1.6s ease-in-out infinite}
+.livenow{color:var(--paper);font-family:var(--sans);font-weight:800;font-size:14px;letter-spacing:.05em;text-transform:uppercase}
+.livevid{position:relative;aspect-ratio:16/9;border-radius:4px;overflow:hidden;background:#000}
+.livevid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.chatbtn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:var(--gold-bright);color:var(--navy);font-family:var(--sans);font-weight:900;font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:12px 20px;border-radius:6px;text-decoration:none}
+.chatbtn:hover{background:#fff}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:.5}}
+.scarf .track .t.live,.scarf .track .livetxt{color:#ff6b6b}
+@media(prefers-reduced-motion:reduce){.livebadge{animation:none}}
 .hero-2 .poster{height:100%}
 .hero-2 .poster h1{font-size:clamp(40px,5.2vw,72px)}
 .hero-2 .poster .deck{margin-top:26px}

@@ -1,9 +1,10 @@
-{{!-- Top scarf ticker: shown site-wide. Always leads with "UP THE TIDE!", then the
-latest podcast episode + the auto-updated match line (from the hidden match-ticker page).
-The two segments are duplicated for a seamless scroll loop. {{#get}} blocks are siblings, never nested. --}}
+{{!-- Top scarf ticker: site-wide. Leads with a LIVE/UPCOMING YouTube alert when relevant
+(from the hidden youtube-live page, kept fresh by the update-youtube job), then "UP THE TIDE!",
+the latest podcast episode, and the auto match line. Segments duplicated for a seamless loop.
+{{#get}} blocks are siblings, never nested. --}}
 <div class="scarf">
     <div class="track">
-        <span class="star">&#10022;</span><span class="cry"><b>UP THE TIDE!</b></span>{{#get "posts" filter="tag:podcast" limit="1" as |ep|}}{{#foreach ep}}<span class="t">&#9670;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{/get}}{{#get "pages" filter="slug:match-ticker" limit="1" as |md|}}{{#foreach md}}<span class="t">&#9670;</span><span><b>{{excerpt}}</b></span>{{/foreach}}{{/get}}
-        <span class="star">&#10022;</span><span class="cry"><b>UP THE TIDE!</b></span>{{#get "posts" filter="tag:podcast" limit="1" as |ep|}}{{#foreach ep}}<span class="t">&#9670;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{/get}}{{#get "pages" filter="slug:match-ticker" limit="1" as |md|}}{{#foreach md}}<span class="t">&#9670;</span><span><b>{{excerpt}}</b></span>{{/foreach}}{{/get}}
+        {{#get "pages" filter="slug:youtube-live" limit="1" as |yt|}}{{#foreach yt}}{{#match title "live"}}<span class="t live">&#9679;</span><span><b class="livetxt">WE'RE LIVE NOW ON YOUTUBE</b></span>{{/match}}{{#match title "upcoming"}}<span class="t live">&#9679;</span><span><b class="livetxt">{{excerpt}}</b></span>{{/match}}{{/foreach}}{{/get}}<span class="star">&#10022;</span><span class="cry"><b>UP THE TIDE!</b></span>{{#get "posts" filter="tag:podcast" limit="1" as |ep|}}{{#foreach ep}}<span class="t">&#9670;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{/get}}{{#get "pages" filter="slug:match-ticker" limit="1" as |md|}}{{#foreach md}}<span class="t">&#9670;</span><span><b>{{excerpt}}</b></span>{{/foreach}}{{/get}}
+        {{#get "pages" filter="slug:youtube-live" limit="1" as |yt|}}{{#foreach yt}}{{#match title "live"}}<span class="t live">&#9679;</span><span><b class="livetxt">WE'RE LIVE NOW ON YOUTUBE</b></span>{{/match}}{{#match title "upcoming"}}<span class="t live">&#9679;</span><span><b class="livetxt">{{excerpt}}</b></span>{{/match}}{{/foreach}}{{/get}}<span class="star">&#10022;</span><span class="cry"><b>UP THE TIDE!</b></span>{{#get "posts" filter="tag:podcast" limit="1" as |ep|}}{{#foreach ep}}<span class="t">&#9670;</span><span><b>New Episode &mdash; {{title}}</b></span>{{/foreach}}{{/get}}{{#get "pages" filter="slug:match-ticker" limit="1" as |md|}}{{#foreach md}}<span class="t">&#9670;</span><span><b>{{excerpt}}</b></span>{{/foreach}}{{/get}}
     </div>
 </div>
