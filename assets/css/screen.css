@@ -170,6 +170,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 /* --- F2: real imagery --- */
 .hero-2{display:grid;grid-template-columns:1fr;gap:22px;align-items:stretch}
 /* live YouTube hero + ticker alert */
+.hero-2:has(.livehero) .poster{display:none}
 .livehero{position:relative;border:3px solid var(--ink);border-radius:6px;overflow:hidden;background:var(--navy);padding:16px}
 .livetop{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
 .livebadge{display:inline-flex;align-items:center;gap:6px;background:#e01b1b;color:#fff;font-family:var(--sans);font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border-radius:4px;animation:livepulse 1.6s ease-in-out infinite}
