@@ -388,9 +388,9 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 .prose li{margin-bottom:8px}
 .prose blockquote{border-left:6px solid var(--gold-bright);margin:30px 0;padding:6px 0 6px 24px;font-style:italic;font-size:22px;color:var(--ink)}
 .prose hr{border:0;border-top:3px solid var(--ink);margin:36px 0}
-.prose .kg-card,.prose .kg-embed-card,.prose .kg-bookmark-card{margin:30px 0}
-.prose .kg-embed-card iframe,.prose iframe[src*="youtube"],.prose iframe[src*="videopress"]{width:100%;height:auto;aspect-ratio:16/9;border:0;display:block}
-.prose iframe{max-width:100%}
+.prose .kg-card,.prose .kg-embed-card,.prose .kg-bookmark-card,.showblurb .kg-card,.showblurb .kg-embed-card{margin:30px 0}
+.prose .kg-embed-card iframe,.prose iframe[src*="youtube"],.prose iframe[src*="videopress"],.showblurb .kg-embed-card iframe,.showblurb iframe[src*="youtube"],.showblurb iframe[src*="videopress"]{width:100%;height:auto;aspect-ratio:16/9;border:0;display:block}
+.prose iframe,.showblurb iframe{max-width:100%}
 
 /* ===== archives ===== */
 .archead{padding:34px 0 0}
