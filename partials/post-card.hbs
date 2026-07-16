@@ -1,5 +1,6 @@
 <a class="pcard" href="{{url}}">
-    <div class="thumb"{{#if feature_image}} style="background-image:url({{img_url feature_image size="m"}})"{{/if}}></div>
+    {{! First card is usually the archive page's LCP element — prioritize it, lazy-load the rest }}
+    <div class="thumb">{{#if feature_image}}<img src="{{img_url feature_image size="m"}}" srcset="{{img_url feature_image size="s"}} 400w, {{img_url feature_image size="m"}} 750w" sizes="(max-width: 620px) 94vw, (max-width: 900px) 46vw, 370px" alt=""{{#if @first}} fetchpriority="high"{{else}} loading="lazy"{{/if}}>{{/if}}</div>
     <div class="b">
         <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
         <h3>{{title}}</h3>

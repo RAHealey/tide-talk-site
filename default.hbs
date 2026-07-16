@@ -7,9 +7,9 @@
 
     <title>{{meta_title}}</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
+    {{!-- Fonts are self-hosted (see @font-face in screen.css); preload the two latin files used above the fold. --}}
+    <link rel="preload" href="{{asset "fonts/libre-franklin-var-latin.woff2"}}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{asset "fonts/eb-garamond-var-latin.woff2"}}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" type="text/css" href="{{asset "css/screen.css"}}">
 
     {{!-- Entity/News schema: tells Google "Tide Talk" is a news org covering RIFC, with these socials. --}}

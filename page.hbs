@@ -9,7 +9,7 @@
         </div>
         {{#if feature_image}}
             <div class="artwrap">
-                <figure class="feature-img"><div class="fi" style="background-image:url({{img_url feature_image size="l"}})"></div></figure>
+                <figure class="feature-img"><div class="fi"><img src="{{img_url feature_image size="l"}}" srcset="{{img_url feature_image size="m"}} 750w, {{img_url feature_image size="l"}} 1200w" sizes="(max-width: 760px) 94vw, 700px" alt="{{title}}" fetchpriority="high"></div></figure>
             </div>
         {{/if}}
     {{/if}}
