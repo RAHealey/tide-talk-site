@@ -38,8 +38,9 @@ platforms and fits the Terrace aesthetic.
 
 Style `.searchbtn`:
 
-- Transparent button, no border; brand light-blue icon (`#5fb2e2`) on the navy
-  masthead, hover to gold (`#fbad18`).
+- Transparent button, no border; ink-navy icon (`var(--ink)`, #0d223f) on the
+  paper masthead — matching the stamp/nav ink aesthetic — hover to
+  `var(--tide-deep)`. SVG stroke-width 2.5 to echo the 2.5px stamp borders.
 - Sized/aligned with the ✉ Subscribe stamp in the `.rhs` row.
 - Visible on desktop **and** mobile (outside the hamburger, like Subscribe).
 
