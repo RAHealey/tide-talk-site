@@ -69,6 +69,9 @@ a{color:inherit;text-decoration:none}
 .stamp{display:inline-block;font-family:var(--sans);font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--ink);border:2.5px solid var(--ink);padding:8px 13px;transform:rotate(-4deg);border-radius:4px;transition:background .15s ease,color .15s ease}
 .stamp:hover{background:var(--ink);color:var(--paper2)}
+.searchbtn{display:inline-block;vertical-align:middle;background:none;border:0;padding:6px;margin-right:10px;cursor:pointer;color:var(--ink);line-height:0;transition:color .15s ease}
+.searchbtn:hover{color:var(--tide-deep)}
+.searchbtn svg{width:22px;height:22px;display:block}
 nav.main{display:flex;gap:0;margin-top:20px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
 nav.main a{flex:1;text-align:center;font-family:var(--sans);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
   padding:12px 8px;border-right:2px solid var(--ink);transition:background .15s ease,color .15s ease}
@@ -262,6 +265,7 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
   .masthead .wrap{padding:16px 18px}
   .mrow .rhs{display:flex;align-items:center;gap:10px}
   .masthead .stamp{display:none}   /* drop Subscribe on mobile — leave just the hamburger, no squish */
+  .searchbtn{margin-right:0;padding:8px}   /* flex gap provides spacing; bigger tap target */
   .hero-shot{display:none}          /* drop the 2nd hero image (baked-in-text feature graphic) on phones */
   .hamburger{display:flex;flex-direction:column;justify-content:center;gap:5px;width:46px;height:42px;border:2.5px solid var(--ink);border-radius:7px;background:var(--paper2);cursor:pointer;padding:0 10px;flex:0 0 auto}
   .hamburger span{display:block;height:3px;background:var(--ink);border-radius:2px}
