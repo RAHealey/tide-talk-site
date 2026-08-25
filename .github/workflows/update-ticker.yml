@@ -3,6 +3,8 @@ name: Update match ticker
 # Runs every 5 minutes so an in-progress RIFC match shows a near-live score in
 # the ticker (public repo = free unlimited minutes). The updater only writes to
 # Ghost when the value actually changes, so quiet runs are cheap no-ops.
+# Also enforces the single-featured-post rule: the homepage hero shows the
+# featured post, so all but the most recently flagged one are auto-demoted.
 on:
   schedule:
     - cron: '*/5 * * * *'
@@ -21,3 +23,9 @@ jobs:
           GHOST_ADMIN_KEY: ${{ secrets.GHOST_ADMIN_KEY }}
           GHOST_URL: https://casual-macaque.pikapod.net
         run: node tools/update-ticker.mjs
+      - name: Enforce single featured post
+        if: always()
+        env:
+          GHOST_ADMIN_KEY: ${{ secrets.GHOST_ADMIN_KEY }}
+          GHOST_URL: https://casual-macaque.pikapod.net
+        run: node tools/enforce-featured.mjs
