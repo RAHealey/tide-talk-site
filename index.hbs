@@ -1,8 +1,8 @@
 {{!< default}}
 
-{{#get "posts" limit="8" include="authors,tags" as |feed|}}
+{{!-- ---------- HERO: live YouTube show when we're on air (else CSS hides it), else the featured post, else the newest post ---------- --}}
+{{#get "posts" limit="1" order="featured desc,updated_at desc" include="authors,tags" as |hp|}}{{#foreach hp}}
 
-    {{! ---------- HERO: live YouTube show when we're on air (else CSS hides it), else newest post ---------- }}
     <section class="hero">
         <div class="wrap hero-2">
             {{#get "pages" filter="slug:youtube-live+title:live" limit="1" as |ytlive|}}{{#foreach ytlive}}
@@ -11,72 +11,77 @@
                     <a class="chatbtn" href="https://www.youtube.com/watch?v={{excerpt}}" target="_blank" rel="noopener">&#128172; Join the chat on YouTube</a>
                 </div>
             {{/foreach}}{{/get}}
-            {{#foreach feed}}{{#has number="1"}}
-                <div class="poster">
-                    <div class="tex"></div>
-                    <div class="halftone"></div>
-                    <div class="inner">
-                        <span class="kick">&#9733; {{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</span>
-                        <h1><a href="{{url}}">{{title}}</a></h1>
-                        <p class="deck">{{excerpt characters="280"}}</p>
-                        <span class="by">{{primary_author.name}} &middot; {{date format="MMMM D, YYYY"}}</span>
-                    </div>
+            <div class="poster">
+                <div class="tex"></div>
+                <div class="halftone"></div>
+                <div class="inner">
+                    <span class="kick">&#9733; {{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</span>
+                    <h1><a href="{{url}}">{{title}}</a></h1>
+                    <p class="deck">{{excerpt characters="280"}}</p>
+                    <span class="by">{{primary_author.name}} &middot; {{date format="MMMM D, YYYY"}}</span>
                 </div>
-            {{/has}}{{/foreach}}
-        </div>
-    </section>
-
-    {{! ---------- STORY STRIP: posts 2-4 ---------- }}
-    <section class="results">
-        <div class="wrap">
-            <div class="rgrid">
-                {{#foreach feed}}{{#has number="2,3,4"}}
-                    <a class="cell" href="{{url}}">
-                        {{! Real <img> (not CSS background) so the browser can fetch it early — the first card is usually the mobile LCP element }}
-                        <div class="thumb">{{#if feature_image}}<img src="{{img_url feature_image size="m"}}" srcset="{{img_url feature_image size="s"}} 400w, {{img_url feature_image size="m"}} 750w" sizes="(max-width: 620px) 94vw, (max-width: 900px) 46vw, 370px" alt=""{{#match @number 2}} fetchpriority="high"{{/match}}>{{/if}}</div>
-                        <div class="cx">
-                            <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
-                            <h3>{{title}}</h3>
-                            <div class="m">{{primary_author.name}} &middot; {{date format="MMM D"}}</div>
-                        </div>
-                    </a>
-                {{/has}}{{/foreach}}
             </div>
         </div>
     </section>
 
-    {{! ---------- THE LATEST: main + side ---------- }}
-    <section class="latest">
-        <div class="wrap">
-            <div class="banner"><span class="flag"><span>Off the Pitch</span></span><h2>The Latest</h2><span class="rule"></span></div>
-            <div class="cols">
-                {{#foreach feed}}{{#has number="5"}}
-                    <a class="mainstory" href="{{url}}">
-                        {{! stand-in gradient (in CSS) — never the real feature image, which has baked-in text that clashes with the overlaid headline }}
-                        <div class="fill"></div>
-                        <div class="ht"></div>
-                        <div class="scrim"></div>
-                        <div class="c">
-                            <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
-                            <h3>{{title}}</h3>
-                            <p>{{excerpt characters="240"}}</p>
-                        </div>
-                    </a>
-                {{/has}}{{/foreach}}
-                <div class="sidelist">
-                    {{#foreach feed}}{{#has number="6,7,8"}}
-                        <a class="item" href="{{url}}">
-                            <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
-                            <h4>{{title}}</h4>
-                            <div class="m">{{primary_author.name}} &middot; {{date format="MMM D"}}</div>
+    {{!-- Strips: 7 newest non-featured posts, excluding the hero. Correct in both hero
+         states — a featured hero is excluded by featured:false, a newest-post hero by
+         its id — so the sections below are always gap- and duplicate-free. --}}
+    {{#get "posts" filter="featured:false+id:-{{id}}" limit="7" include="authors,tags" as |feed|}}
+
+        {{!-- ---------- STORY STRIP: feed 1-3 ---------- --}}
+        <section class="results">
+            <div class="wrap">
+                <div class="rgrid">
+                    {{#foreach feed}}{{#has number="1,2,3"}}
+                        <a class="cell" href="{{url}}">
+                            {{!-- Real <img> (not CSS background) so the browser can fetch it early — the first card is usually the mobile LCP element --}}
+                            <div class="thumb">{{#if feature_image}}<img src="{{img_url feature_image size="m"}}" srcset="{{img_url feature_image size="s"}} 400w, {{img_url feature_image size="m"}} 750w" sizes="(max-width: 620px) 94vw, (max-width: 900px) 46vw, 370px" alt=""{{#match @number 1}} fetchpriority="high"{{/match}}>{{/if}}</div>
+                            <div class="cx">
+                                <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
+                                <h3>{{title}}</h3>
+                                <div class="m">{{primary_author.name}} &middot; {{date format="MMM D"}}</div>
+                            </div>
                         </a>
                     {{/has}}{{/foreach}}
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-{{/get}}
+        {{!-- ---------- THE LATEST: feed 4 main + feed 5-7 side ---------- --}}
+        <section class="latest">
+            <div class="wrap">
+                <div class="banner"><span class="flag"><span>Off the Pitch</span></span><h2>The Latest</h2><span class="rule"></span></div>
+                <div class="cols">
+                    {{#foreach feed}}{{#has number="4"}}
+                        <a class="mainstory" href="{{url}}">
+                            {{!-- stand-in gradient (in CSS) — never the real feature image, which has baked-in text that clashes with the overlaid headline --}}
+                            <div class="fill"></div>
+                            <div class="ht"></div>
+                            <div class="scrim"></div>
+                            <div class="c">
+                                <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
+                                <h3>{{title}}</h3>
+                                <p>{{excerpt characters="240"}}</p>
+                            </div>
+                        </a>
+                    {{/has}}{{/foreach}}
+                    <div class="sidelist">
+                        {{#foreach feed}}{{#has number="5,6,7"}}
+                            <a class="item" href="{{url}}">
+                                <div class="k">{{#if primary_tag}}{{primary_tag.name}}{{else}}Latest{{/if}}</div>
+                                <h4>{{title}}</h4>
+                                <div class="m">{{primary_author.name}} &middot; {{date format="MMM D"}}</div>
+                            </a>
+                        {{/has}}{{/foreach}}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    {{/get}}
+
+{{/foreach}}{{/get}}
 
 {{! ---------- QUOTE BAND ---------- }}
 <section class="chant">
