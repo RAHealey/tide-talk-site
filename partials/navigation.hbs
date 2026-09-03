@@ -1,7 +1,14 @@
 <nav class="main">
+    {{!-- Ghost's navigation (Settings → Navigation), minus items handled below.
+         Offseason Tracker is hidden for the season; Store is always rendered last. --}}
     {{#foreach navigation}}
-        <a href="{{url absolute="true"}}" class="{{#if current}}on{{/if}}">{{label}}</a>
+        {{#match slug "!=" "offseason-tracker"}}{{#match slug "!=" "store"}}
+            <a href="{{url absolute="true"}}" class="{{#if current}}on{{/if}}">{{label}}</a>
+        {{/match}}{{/match}}
     {{/foreach}}
-    {{!-- Theme-provided link (Settings → Navigation can't be set via the API key). If the same link is added in Ghost settings, CSS hides this copy. --}}
+    {{!-- Theme-provided link (the API key can't edit Settings → Navigation). If the same link is added in Ghost settings, CSS hides this copy. --}}
     <a href="{{@site.url}}/playoff-picture/" class="nav-playoff">Playoff Picture</a>
+    {{#foreach navigation}}
+        {{#match slug "store"}}<a href="{{url absolute="true"}}" class="{{#if current}}on{{/if}}">{{label}}</a>{{/match}}
+    {{/foreach}}
 </nav>
