@@ -202,8 +202,8 @@ export function renderHtml(data) {
   .pt-twocol .pt-sec{display:grid;grid-template-rows:subgrid;grid-row:span 4;align-content:start;margin-bottom:46px}
   .pt-twocol .pt-sub{align-self:start}
   @supports not (grid-template-rows:subgrid){.pt-twocol .pt-sub{min-height:3.2em}}
-  .pt-fix{grid-template-columns:repeat(3,1fr)}
-  .pt-fix li:nth-last-child(-n+3){border-bottom:0}
+  .pt ul.pt-fix{grid-template-columns:repeat(3,1fr)}
+  .pt ul.pt-fix li:nth-last-child(-n+3){border-bottom:0}
   .pt-odd b{font-size:64px}
 }
 @media(max-width:760px){
@@ -214,8 +214,8 @@ export function renderHtml(data) {
   .pt-odds{grid-template-columns:1fr 1fr}
   .pt-odd:nth-child(2){border-right:0}
   .pt-odd:nth-child(-n+2){border-bottom:3px solid var(--ink)}
-  .pt-fix{grid-template-columns:1fr}
-  .pt-fix li:nth-last-child(2){border-bottom:2px solid var(--line)}
+  .pt ul.pt-fix{grid-template-columns:1fr}
+  .pt ul.pt-fix li:nth-last-child(2){border-bottom:2px solid var(--line)}
   .pt-big{font-size:clamp(88px,26vw,140px)}
 }
 </style>
