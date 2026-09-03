@@ -32,6 +32,7 @@
         {{!-- ---------- STORY STRIP: feed 1-3 ---------- --}}
         <section class="results">
             <div class="wrap">
+                <div class="banner"><span class="flag"><span>Just In</span></span><h2>The Latest</h2><span class="rule"></span></div>
                 <div class="rgrid">
                     {{#foreach feed}}{{#has number="1,2,3"}}
                         <a class="cell" href="{{url}}">
@@ -51,7 +52,7 @@
         {{!-- ---------- THE LATEST: feed 4 main + feed 5-7 side ---------- --}}
         <section class="latest">
             <div class="wrap">
-                <div class="banner"><span class="flag"><span>Off the Pitch</span></span><h2>The Latest</h2><span class="rule"></span></div>
+                <div class="banner"><span class="flag"><span>Off the Pitch</span></span><h2>More on the Tide</h2><span class="rule"></span></div>
                 <div class="cols">
                     {{#foreach feed}}{{#has number="4"}}
                         <a class="mainstory" href="{{url}}">
