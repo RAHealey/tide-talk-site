@@ -77,7 +77,7 @@ export function renderHtml(data) {
     const me = ranked.find((r) => r.id === team.id);
     const simRow = (id) => sim.teams.find((t) => t.id === id);
 
-    const TITLES = ['Playoff spot', 'First-round home playoff game'];
+    const TITLES = ['Playoff spot', 'Home playoff game'];
     const card = ({ label, tone, big, strike, stamp, headline, body }, i) => `<div class="pt-num pt-num--${tone}">
   <div class="pt-title"><span>${TITLES[i]}</span><small>${i === 0 ? 'Top 8 in the East' : 'Top 4 in the East'}</small></div>
   <div class="pt-kick">${esc(label)}</div>
