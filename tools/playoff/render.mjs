@@ -171,7 +171,7 @@ export function renderHtml(data) {
 .pt-legend i{display:inline-block;width:22px;border-top:3px dashed var(--tide);vertical-align:middle;margin-right:6px}
 .pt-legend i.red{border-color:var(--red)}
 /* fixtures */
-.pt-fix{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 30px;border:3px solid var(--ink);border-radius:6px;background:var(--paper2);padding:8px 22px}
+.pt ul.pt-fix{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 34px;border:3px solid var(--ink);border-radius:6px;background:var(--paper2);padding:12px 26px}
 .pt-fix li{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:2px solid var(--line);font-family:var(--sans);font-size:15px}
 .pt-fix li:nth-last-child(-n+2){border-bottom:0}
 .pt-fix .d{font-weight:900;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--tide);width:54px;flex:none}
@@ -198,8 +198,10 @@ export function renderHtml(data) {
   .pt-poster .deck{font-size:24px}
   .pt-num{padding:36px 40px 40px}
   .pt-big{font-size:clamp(150px,15vw,200px)}
-  .pt-twocol{display:grid;grid-template-columns:5fr 7fr;gap:34px;align-items:start}
-  .pt-twocol .pt-sec{margin-bottom:46px}
+  .pt-twocol{display:grid;grid-template-columns:5fr 7fr;gap:0 34px;align-items:start}
+  .pt-twocol .pt-sec{display:grid;grid-template-rows:subgrid;grid-row:span 4;align-content:start;margin-bottom:46px}
+  .pt-twocol .pt-sub{align-self:end}
+  @supports not (grid-template-rows:subgrid){.pt-twocol .pt-sub{min-height:3.2em}}
   .pt-fix{grid-template-columns:repeat(3,1fr)}
   .pt-fix li:nth-last-child(-n+3){border-bottom:0}
   .pt-odd b{font-size:64px}
