@@ -2,4 +2,6 @@
     {{#foreach navigation}}
         <a href="{{url absolute="true"}}" class="{{#if current}}on{{/if}}">{{label}}</a>
     {{/foreach}}
+    {{!-- Theme-provided link (Settings → Navigation can't be set via the API key). If the same link is added in Ghost settings, CSS hides this copy. --}}
+    <a href="{{@site.url}}/playoff-picture/" class="nav-playoff">Playoff Picture</a>
 </nav>

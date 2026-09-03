@@ -79,6 +79,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2.5px solid var
 
 nav.main{display:flex;gap:0;margin-top:20px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
 nav.main a{flex:1;text-align:center;font-family:var(--sans);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+nav.main a[href$="/playoff-picture/"]~a.nav-playoff{display:none} /* avoid a duplicate if Ghost nav also has it */
   padding:12px 8px;border-right:2px solid var(--ink);transition:background .15s ease,color .15s ease}
 nav.main a:last-child{border-right:0}
 nav.main a:hover{background:var(--ink);color:var(--paper)}
@@ -103,7 +104,7 @@ nav.main a.on{background:var(--gold-bright);color:var(--ink)}
 .poster .by{font-family:var(--sans);font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tide-bright);white-space:nowrap}
 
 /* result strip */
-.results{padding:26px 0}
+.results{padding:34px 0 26px}
 .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:3px solid var(--ink)}
 .rgrid .cell{padding:22px 24px;border-right:3px solid var(--ink)}
 .rgrid .cell:last-child{border-right:0}
