@@ -200,7 +200,7 @@ export function renderHtml(data) {
   .pt-big{font-size:clamp(150px,15vw,200px)}
   .pt-twocol{display:grid;grid-template-columns:5fr 7fr;gap:0 34px;align-items:start}
   .pt-twocol .pt-sec{display:grid;grid-template-rows:subgrid;grid-row:span 4;align-content:start;margin-bottom:46px}
-  .pt-twocol .pt-sub{align-self:end}
+  .pt-twocol .pt-sub{align-self:start}
   @supports not (grid-template-rows:subgrid){.pt-twocol .pt-sub{min-height:3.2em}}
   .pt-fix{grid-template-columns:repeat(3,1fr)}
   .pt-fix li:nth-last-child(-n+3){border-bottom:0}
