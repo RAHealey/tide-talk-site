@@ -61,7 +61,7 @@ async function upsert(html, excerpt, hash) {
         if ((p.lexical || '').includes(marker)) { console.log('unchanged — skipping write'); return 200; }
         const r = await gh(`/ghost/api/admin/pages/${p.id}/`, {
             method: 'PUT',
-            body: JSON.stringify({ pages: [{ updated_at: p.updated_at, lexical: lexicalHtmlCard(body), custom_excerpt: excerpt, status: 'published' }] }),
+            body: JSON.stringify({ pages: [{ updated_at: p.updated_at, lexical: lexicalHtmlCard(body), custom_excerpt: excerpt, status: 'published', custom_template: 'custom-playoff-picture' }] }),
         });
         if (!r.ok) console.error(await r.text());
         return r.status;
@@ -72,6 +72,7 @@ async function upsert(html, excerpt, hash) {
             title: TITLE, slug: SLUG, status: 'published',
             lexical: lexicalHtmlCard(body), custom_excerpt: excerpt,
             show_title_and_feature_image: false,
+            custom_template: 'custom-playoff-picture',
             meta_title: 'Rhode Island FC Playoff Picture — Tide Talk',
             meta_description: 'How many points RIFC need for the USL Championship playoffs and a home playoff game, and how likely each is. Updated automatically.',
         }] }),

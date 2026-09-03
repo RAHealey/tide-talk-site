@@ -192,6 +192,18 @@ export function renderHtml(data) {
   .pt-big.is-struck::after{animation:pt-fade 200ms ease 300ms both}
   @keyframes pt-fade{from{opacity:0}to{opacity:1}}
 }
+@media(min-width:1000px){
+  .pt-poster .in{padding:56px 60px 62px}
+  .pt-poster h1{font-size:clamp(64px,7.5vw,104px)}
+  .pt-poster .deck{font-size:24px}
+  .pt-num{padding:36px 40px 40px}
+  .pt-big{font-size:clamp(150px,15vw,200px)}
+  .pt-twocol{display:grid;grid-template-columns:5fr 7fr;gap:34px;align-items:start}
+  .pt-twocol .pt-sec{margin-bottom:46px}
+  .pt-fix{grid-template-columns:repeat(3,1fr)}
+  .pt-fix li:nth-last-child(-n+3){border-bottom:0}
+  .pt-odd b{font-size:64px}
+}
 @media(max-width:760px){
   .pt-nums{grid-template-columns:1fr}
   .pt-num{border-right:0;border-bottom:3px solid var(--ink)}
@@ -225,6 +237,7 @@ ${banner('How likely')}
 </div>
 </section>
 
+<div class="pt-twocol">
 <section class="pt-sec">
 ${banner('What each total buys')}
 <p class="pt-sub">Chance of a playoff spot and a home game, given where Rhode Island's points finish. ${playoff.clinchPts != null ? `The highlighted row is the guarantee line (${playoff.clinchPts}).` : ''}</p>
@@ -237,6 +250,7 @@ ${banner('Eastern Conference')}
 <div class="pt-scroll"><table><thead><tr><th>#</th><th>Club</th><th>GP</th><th>W-L-D</th><th>GD</th><th>Pts</th><th>Max</th><th>Playoffs</th><th>Top 4</th></tr></thead><tbody>${tableRows}</tbody></table></div>
 <div class="pt-legend"><span><i></i>Home-game line</span><span><i class="red"></i>Playoff line</span></div>
 </section>
+</div>
 
 <section class="pt-sec">
 ${banner('Remaining fixtures')}
