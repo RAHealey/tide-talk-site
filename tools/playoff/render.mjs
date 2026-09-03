@@ -77,7 +77,7 @@ export function renderHtml(data) {
     const me = ranked.find((r) => r.id === team.id);
     const simRow = (id) => sim.teams.find((t) => t.id === id);
 
-    const TITLES = ['Playoff spot', 'First-round home playoff game'];
+    const TITLES = ['Playoff spot', 'Home playoff game'];
     const card = ({ label, tone, big, strike, stamp, headline, body }, i) => `<div class="pt-num pt-num--${tone}">
   <div class="pt-title"><span>${TITLES[i]}</span><small>${i === 0 ? 'Top 8 in the East' : 'Top 4 in the East'}</small></div>
   <div class="pt-kick">${esc(label)}</div>
@@ -171,7 +171,7 @@ export function renderHtml(data) {
 .pt-legend i{display:inline-block;width:22px;border-top:3px dashed var(--tide);vertical-align:middle;margin-right:6px}
 .pt-legend i.red{border-color:var(--red)}
 /* fixtures */
-.pt-fix{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 30px;border:3px solid var(--ink);border-radius:6px;background:var(--paper2);padding:8px 22px}
+.pt ul.pt-fix{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 34px;border:3px solid var(--ink);border-radius:6px;background:var(--paper2);padding:12px 26px}
 .pt-fix li{display:flex;align-items:baseline;gap:10px;padding:9px 0;border-bottom:2px solid var(--line);font-family:var(--sans);font-size:15px}
 .pt-fix li:nth-last-child(-n+2){border-bottom:0}
 .pt-fix .d{font-weight:900;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--tide);width:54px;flex:none}
@@ -191,6 +191,20 @@ export function renderHtml(data) {
   .pt-poster,.pt-num,.pt-odd,.pt-stamp{animation:pt-fade 200ms ease both}
   .pt-big.is-struck::after{animation:pt-fade 200ms ease 300ms both}
   @keyframes pt-fade{from{opacity:0}to{opacity:1}}
+}
+@media(min-width:1000px){
+  .pt-poster .in{padding:56px 60px 62px}
+  .pt-poster h1{font-size:clamp(64px,7.5vw,104px)}
+  .pt-poster .deck{font-size:24px}
+  .pt-num{padding:36px 40px 40px}
+  .pt-big{font-size:clamp(150px,15vw,200px)}
+  .pt-twocol{display:grid;grid-template-columns:5fr 7fr;gap:0 34px;align-items:start}
+  .pt-twocol .pt-sec{display:grid;grid-template-rows:subgrid;grid-row:span 4;align-content:start;margin-bottom:46px}
+  .pt-twocol .pt-sub{align-self:start}
+  @supports not (grid-template-rows:subgrid){.pt-twocol .pt-sub{min-height:3.2em}}
+  .pt-fix{grid-template-columns:repeat(3,1fr)}
+  .pt-fix li:nth-last-child(-n+3){border-bottom:0}
+  .pt-odd b{font-size:64px}
 }
 @media(max-width:760px){
   .pt-nums{grid-template-columns:1fr}
@@ -225,6 +239,7 @@ ${banner('How likely')}
 </div>
 </section>
 
+<div class="pt-twocol">
 <section class="pt-sec">
 ${banner('What each total buys')}
 <p class="pt-sub">Chance of a playoff spot and a home game, given where Rhode Island's points finish. ${playoff.clinchPts != null ? `The highlighted row is the guarantee line (${playoff.clinchPts}).` : ''}</p>
@@ -237,6 +252,7 @@ ${banner('Eastern Conference')}
 <div class="pt-scroll"><table><thead><tr><th>#</th><th>Club</th><th>GP</th><th>W-L-D</th><th>GD</th><th>Pts</th><th>Max</th><th>Playoffs</th><th>Top 4</th></tr></thead><tbody>${tableRows}</tbody></table></div>
 <div class="pt-legend"><span><i></i>Home-game line</span><span><i class="red"></i>Playoff line</span></div>
 </section>
+</div>
 
 <section class="pt-sec">
 ${banner('Remaining fixtures')}

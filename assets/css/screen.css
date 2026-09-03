@@ -229,6 +229,8 @@ footer{background:var(--ink);color:#a9bcd4;padding:48px 0 38px;font-family:var(-
 /* ===== ARTICLE PAGE ===== */
 .artpage{padding:14px 0 30px}
 .artwrap{max-width:740px;margin:0 auto;padding:0 30px}
+.playoffpage{padding:28px 0 40px}
+.playoffwrap{max-width:var(--maxw)}
 .crumb{font-family:var(--sans);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tide);padding-top:30px}
 .arttitle{font-family:var(--sans);font-weight:900;font-size:clamp(34px,5vw,54px);line-height:.98;letter-spacing:-.025em;text-transform:uppercase;margin-top:16px;text-wrap:balance}
 .artmeta{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:24px 0 30px;font-family:var(--sans)}

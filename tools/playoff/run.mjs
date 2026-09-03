@@ -56,7 +56,7 @@ async function main() {
     await writeFile(`${out}.html`, html);
     // Preview wraps the fragment in the real theme stylesheet (paper, fonts, texture) the way a Ghost page would.
     const themeCss = path.relative(path.dirname(out), 'assets/css/screen.css');
-    await writeFile(`${out}.preview.html`, `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RIFC playoff tracker</title><link rel="stylesheet" href="${themeCss}"></head><body><div class="page"><div class="wrap" style="padding-top:36px;padding-bottom:60px;max-width:900px">${html}</div></div></body></html>`);
+    await writeFile(`${out}.preview.html`, `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RIFC playoff tracker</title><link rel="stylesheet" href="${themeCss}"></head><body><div class="page"><article class="artpage playoffpage"><div class="wrap playoffwrap">${html}</div></article></div></body></html>`);
     console.log(renderText(data));
     console.log(`\nWrote ${out}.json, ${out}.html, ${out}.preview.html`);
 }
