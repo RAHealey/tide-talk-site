@@ -35,13 +35,13 @@ export function describe({ team, playoff, home, sim, ranked, fixtures }) {
     if (playoff.clinched) {
         cards.push({ label: 'Clinched', tone: 'good', big: '✓', headline: `${short} have clinched a playoff spot.`, body: `Guaranteed top eight in the East with ${playoff.remaining} to play.` });
     } else if (playoff.eliminated) {
-        cards.push({ label: 'Eliminated', tone: 'bad', big: String(playoff.maxPts), strike: true, stamp: 'Eliminated', headline: 'Points is the most Rhode Island can reach, and it is not enough.', body: `Even a perfect finish (${playoff.maxPts} points) leaves ${playoff.lockedAbove.length} clubs locked above ${short}.` });
+        cards.push({ label: 'Eliminated', tone: 'bad', big: String(3 * playoff.remaining), strike: true, stamp: 'Eliminated', headline: 'Is every point left, and it still would not be enough.', body: `Even a perfect finish (${playoff.maxPts} points) leaves ${playoff.lockedAbove.length} clubs locked above ${short}.` });
     } else if (playoff.inOwnHands) {
         cards.push({ label: 'Still achievable', tone: 'good', big: String(playoff.magic),
-            headline: `Points from ${playoff.remaining} matches secures a playoff spot.`,
+            headline: 'Secures a playoff spot.',
             body: `That's <b>${winsPhrase(playoff.magic)}</b>, or any combination of results adding up to ${playoff.magic} points, out of the ${playoff.remaining} games left. No help required from anyone else.` });
     } else {
-        cards.push({ label: 'Not in their hands', tone: 'warn', big: String(playoff.maxPts), strike: true, stamp: 'Needs help', headline: 'Even a perfect finish cannot guarantee the top eight.', body: `${short} can reach ${playoff.maxPts} points at most; too many rivals can match it. The playoffs are ${pct(p8)} likely on current form.` });
+        cards.push({ label: 'Not in their hands', tone: 'warn', big: String(3 * playoff.remaining), strike: true, stamp: 'Needs help', headline: 'Is every point left, and even that cannot guarantee the top eight.', body: `${short} can reach ${playoff.maxPts} points at most; too many rivals can match it. The playoffs are ${pct(p8)} likely on current form.` });
     }
 
     // Card 2: home playoff game (top 4)
@@ -49,24 +49,26 @@ export function describe({ team, playoff, home, sim, ranked, fixtures }) {
         cards.push({ label: 'Clinched', tone: 'good', big: '✓', headline: `${short} have clinched a home playoff game.`, body: 'Guaranteed top four in the East.' });
     } else if (home.inOwnHands) {
         cards.push({ label: 'Still achievable', tone: 'good', big: String(home.magic),
-            headline: `Points from ${home.remaining} matches clinches a home playoff game.`,
+            headline: 'Clinches a home playoff game.',
             body: `That's <b>${winsPhrase(home.magic)}</b> from the last ${home.remaining}. On current form it's ${pct(p4)} likely.` });
     } else {
         // The k-th strongest rival ceiling sets the bar; we would need to beat it outright.
         const rival = home.threats[home.k - 1];
-        const needed = rival ? rival.ceiling + 1 : home.maxPts + 1;
-        const shortBy = needed - home.maxPts;
+        const neededTotal = rival ? rival.ceiling + 1 : home.maxPts + 1;
+        const needed = neededTotal - home.currentPts;   // points from the games left, same unit as the playoff card
+        const available = 3 * home.remaining;           // the most they can still earn
+        const shortBy = needed - available;
         let h2hNote = '';
         if (rival) {
             const { lead, played, scheduled } = rival.h2h;
             const done = played >= scheduled;
             if (lead === 'them') h2hNote = done ? ' and <b>owns the head-to-head tiebreaker</b>' : ` and <b>currently leads the head-to-head</b> (${scheduled - played} meeting${scheduled - played === 1 ? '' : 's'} still to play)`;
-            else if (lead === 'us') h2hNote = done ? ', though ${short} own the head-to-head' : `, though ${short} currently lead the head-to-head`;
+            else if (lead === 'us') h2hNote = done ? `, though ${short} own the head-to-head` : `, though ${short} currently lead the head-to-head`;
         }
         cards.push({ label: home.eliminated ? 'Out of reach' : 'Out of reach on their own', tone: home.eliminated ? 'bad' : 'warn', big: String(needed), strike: true,
             stamp: home.eliminated ? 'Eliminated' : 'Needs help',
-            headline: home.eliminated ? 'Points would have clinched a home playoff game — it can no longer happen.' : 'Points would <em>guarantee</em> a home playoff game — but the math doesn\'t work.',
-            body: `A perfect ${home.remaining}-0 run only produces <b>${home.maxPts} points</b>, ${shortBy} short of ${needed}. ${rival ? `${esc(rival.short)} can match ${short}'s ceiling exactly${h2hNote}` : ''} — so even a flawless finish isn't enough on its own. It can still happen with help: simulations give a home playoff game a <b>${pct(p4)}</b> chance.` });
+            headline: home.eliminated ? 'Would have clinched a home playoff game — it can no longer happen.' : 'Would <em>guarantee</em> a home playoff game — but the math doesn\'t work.',
+            body: `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of ${needed}. ${rival ? `${esc(rival.short)} can match ${short}'s ceiling exactly${h2hNote}` : ''} — so even a flawless finish isn't enough on its own. It can still happen with help: simulations give a home playoff game a <b>${pct(p4)}</b> chance.` });
     }
     return cards;
 }
@@ -82,6 +84,7 @@ export function renderHtml(data) {
   <div class="pt-title"><span>${TITLES[i]}</span><small>${i === 0 ? 'Top 8 in the East' : 'Top 4 in the East'}</small></div>
   <div class="pt-kick">${esc(label)}</div>
   <div class="pt-big${strike ? ' is-struck' : ''}"><span>${esc(big)}</span>${strike ? `<i class="pt-stamp">${esc(stamp || 'Not enough')}</i>` : ''}</div>
+  <div class="pt-unit">points from the last ${me.remaining} matches</div>
   <h3 class="pt-h3">${headline}</h3>
   <p class="pt-body">${body}</p>
 </div>`;
@@ -132,6 +135,7 @@ export function renderHtml(data) {
 .pt-big.is-struck span{color:var(--muted);opacity:.55}
 .pt-big.is-struck::after{content:"";position:absolute;left:-4%;right:-8%;top:52%;height:10px;background:var(--red);transform:rotate(-7deg);border-radius:2px;clip-path:inset(0 0 0 0);animation:pt-strike 420ms var(--ease-out) 520ms both}
 .pt-stamp{position:absolute;right:-34px;top:-10px;font-family:var(--sans);font-style:normal;font-weight:900;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);border:3px solid var(--red);border-radius:4px;padding:4px 9px;transform:rotate(9deg);background:var(--paper2)}
+.pt-unit{font-family:var(--sans);font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:-6px 0 14px}
 .pt-h3{font-family:var(--sans);font-weight:900;font-size:22px;line-height:1.05;letter-spacing:-.015em;text-transform:uppercase;margin-bottom:12px;text-wrap:balance}
 .pt-h3 em{font-style:normal;color:var(--tide-deep)}
 .pt-body{font-family:var(--serif);font-size:18px;line-height:1.5;color:#2b3648;max-width:44ch}
@@ -202,8 +206,8 @@ export function renderHtml(data) {
   .pt-twocol .pt-sec{display:grid;grid-template-rows:subgrid;grid-row:span 4;align-content:start;margin-bottom:46px}
   .pt-twocol .pt-sub{align-self:start}
   @supports not (grid-template-rows:subgrid){.pt-twocol .pt-sub{min-height:3.2em}}
-  .pt-fix{grid-template-columns:repeat(3,1fr)}
-  .pt-fix li:nth-last-child(-n+3){border-bottom:0}
+  .pt ul.pt-fix{grid-template-columns:repeat(3,1fr)}
+  .pt ul.pt-fix li:nth-last-child(-n+3){border-bottom:0}
   .pt-odd b{font-size:64px}
 }
 @media(max-width:760px){
@@ -214,8 +218,8 @@ export function renderHtml(data) {
   .pt-odds{grid-template-columns:1fr 1fr}
   .pt-odd:nth-child(2){border-right:0}
   .pt-odd:nth-child(-n+2){border-bottom:3px solid var(--ink)}
-  .pt-fix{grid-template-columns:1fr}
-  .pt-fix li:nth-last-child(2){border-bottom:2px solid var(--line)}
+  .pt ul.pt-fix{grid-template-columns:1fr}
+  .pt ul.pt-fix li:nth-last-child(2){border-bottom:2px solid var(--line)}
   .pt-big{font-size:clamp(88px,26vw,140px)}
 }
 </style>
@@ -235,7 +239,7 @@ ${banner('How likely')}
 <div class="pt-odd"><b>${pct(sim.focus.pTop8)}</b><span>Make the playoffs<br>(top 8)</span></div>
 <div class="pt-odd gold"><b>${pct(sim.focus.pTop4)}</b><span>Host a playoff game<br>(top 4)</span></div>
 <div class="pt-odd"><b>${sim.focus.avgPts.toFixed(1)}</b><span>Average final<br>points</span></div>
-<div class="pt-odd"><b>${confidence.top8_90 ?? '—'}</b><span>Points for a 90%<br>playoff chance</span></div>
+<div class="pt-odd"><b>${confidence.top8_90 ?? '—'}</b><span>Final points for a<br>90% playoff chance</span></div>
 </div>
 </section>
 
