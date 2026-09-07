@@ -4,6 +4,7 @@ import { buildTable, rankConference } from './standings.mjs';
 import { clinchNumber, headToHead, winsDecidedTie } from './magic.mjs';
 import { parseGames } from './espn.mjs';
 import { simulate, poisson, mulberry32 } from './simulate.mjs';
+import { describe as describeCards } from './render.mjs';
 
 const T = (id, conf = 'East') => ({ id, name: `Team ${id}`, short: id, abbr: id, conf });
 let gid = 0;
@@ -89,4 +90,60 @@ test('simulation is deterministic and probabilities sum sensibly', () => {
     const r = mulberry32(1); const xs = Array.from({ length: 2000 }, () => poisson(1.5, r));
     const mean = xs.reduce((a, b) => a + b, 0) / xs.length;
     assert.ok(mean > 1.3 && mean < 1.7, `poisson mean ${mean}`);
+});
+
+// --- card copy ---------------------------------------------------------------
+const card = (playoff, home, p8 = 0.9, p4 = 0.3) => describeCards({
+    team: { id: 'R', short: 'RIFC' }, playoff, home, sim: { focus: { pTop8: p8, pTop4: p4 } },
+});
+const st = { k: 8, currentPts: 29, remaining: 9, maxPts: 56, clinchPts: 46, magic: 17,
+    clinched: false, inOwnHands: true, eliminated: false, lockedAbove: [], threats: [] };
+const rival = (short, ceiling) => ({ short, ceiling, pts: 30, remaining: 9, tieEdge: 'open',
+    h2h: { lead: 'them', played: 2, scheduled: 2 } });
+
+test('cards: both numbers are points from the remaining games', () => {
+    const [a, b] = card({ ...st }, { ...st, k: 4, inOwnHands: false, clinchPts: null, magic: null,
+        threats: [rival('A', 69), rival('B', 61), rival('C', 60), rival('D', 56)] });
+    assert.equal(a.big, '17');                       // points still needed
+    assert.equal(b.big, String(56 + 1 - 29));        // rival ceiling + 1, as a delta, not a season total
+    assert.match(b.body, /worth <b>27 points<\/b>, 1 short of 28/);
+});
+
+test('cards: an eliminated card never claims it can still happen', () => {
+    const [, b] = card({ ...st }, { ...st, k: 4, inOwnHands: false, eliminated: true, clinchPts: null,
+        magic: null, remaining: 2, maxPts: 35, lockedAbove: ['A', 'B', 'C', 'D'],
+        threats: [rival('A', 60), rival('B', 55), rival('C', 50), rival('D', 44)] }, 1, 0);
+    assert.equal(b.tone, 'bad');
+    assert.equal(b.stamp, 'Eliminated');
+    assert.doesNotMatch(b.body, /can still happen/);
+    assert.match(b.body, /off the table/);
+});
+
+test('cards: needing help is gold, not red', () => {
+    const [, b] = card({ ...st }, { ...st, k: 4, inOwnHands: false, clinchPts: null, magic: null,
+        threats: [rival('A', 69), rival('B', 61), rival('C', 60), rival('D', 56)] });
+    assert.equal(b.tone, 'warn');
+    assert.equal(b.stamp, 'Needs help');
+});
+
+test('cards: clinched shows a tick and no strike', () => {
+    const [a, b] = card({ ...st, clinched: true }, { ...st, k: 4, clinched: true }, 1, 1);
+    for (const c of [a, b]) { assert.equal(c.big, '\u2713'); assert.ok(!c.strike); assert.equal(c.tone, 'good'); }
+});
+
+test('cards: no unresolved template placeholders in any state', () => {
+    const states = [
+        [{ ...st }, { ...st, k: 4 }],
+        [{ ...st, clinched: true }, { ...st, k: 4, clinched: true }],
+        [{ ...st, inOwnHands: false, eliminated: true, clinchPts: null, magic: null, lockedAbove: ['A'] },
+         { ...st, k: 4, inOwnHands: false, eliminated: true, clinchPts: null, magic: null, lockedAbove: ['A'],
+          threats: [rival('A', 60), rival('B', 55), rival('C', 50), rival('D', 44)] }],
+        [{ ...st }, { ...st, k: 4, inOwnHands: false, clinchPts: null, magic: null,
+          threats: [rival('A', 69), rival('B', 61), rival('C', 60),
+              { short: 'D', ceiling: 56, pts: 30, remaining: 9, tieEdge: 'us', h2h: { lead: 'us', played: 2, scheduled: 2 } }] }],
+    ];
+    for (const [p, h] of states) for (const c of card(p, h)) {
+        assert.doesNotMatch(c.headline + c.body, /\$\{/, `placeholder leaked: ${c.label}`);
+        assert.ok(c.big && c.headline && c.body);
+    }
 });
