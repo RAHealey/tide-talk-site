@@ -4,7 +4,7 @@
  *
  * Builds the tracker (see run.mjs) and upserts it into the Ghost page
  * /playoff-picture/ as a single HTML card, so the markup lands verbatim.
- * Skips the write when nothing but the timestamp changed.
+ * Skips the write when nothing but the timestamp changed (numbers or markup).
  *
  * Env:
  *   GHOST_ADMIN_KEY = "<id>:<secret>"   Ghost Admin API key
@@ -34,10 +34,16 @@ const gh = (path, opts = {}) => fetch(GHOST_URL + path, {
     headers: { Authorization: 'Ghost ' + ghToken(), 'Accept-Version': 'v5.0', 'Content-Type': 'application/json', ...(opts.headers || {}) },
 });
 
-/** Everything that matters for "did the picture change", timestamp excluded. */
+/**
+ * Everything that matters for "did the page change", timestamp excluded: the
+ * numbers AND the rendered markup, so copy or style fixes republish too.
+ */
 function fingerprint(data) {
     const { asOf, ...rest } = data;
-    return crypto.createHash('sha1').update(JSON.stringify(rest)).digest('hex').slice(0, 12);
+    return crypto.createHash('sha1')
+        .update(JSON.stringify(rest))
+        .update(renderHtml({ ...data, asOf: '' }))
+        .digest('hex').slice(0, 12);
 }
 
 const lexicalHtmlCard = (html) => JSON.stringify({
