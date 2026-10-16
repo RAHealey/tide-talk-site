@@ -99,4 +99,9 @@ console.log('fingerprint', hash, '| html bytes', html.length);
 if (process.env.DRY_RUN === '1') { console.log('DRY_RUN — not writing to Ghost.'); process.exit(0); }
 const status = await upsert(html, summary(data), hash);
 console.log(`Ghost page /${SLUG}/ upsert HTTP`, status);
-process.exit(status >= 200 && status < 300 ? 0 : 1);
+if (status < 200 || status >= 300) process.exit(1);
+// Read it back: a 200 that did not store our fingerprint is still a failure.
+const check = await gh(`/ghost/api/admin/pages/slug/${SLUG}/?fields=lexical`);
+const stored = check.ok ? (await check.json()).pages[0].lexical || '' : '';
+if (!stored.includes(`<!-- pt:${hash} -->`)) { console.error(`read-back failed: page does not carry fingerprint ${hash}`); process.exit(1); }
+console.log('verified: page carries fingerprint', hash);

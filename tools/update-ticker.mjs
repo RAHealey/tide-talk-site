@@ -60,19 +60,20 @@ function parseEvents(data) {
 
 async function collect() {
     const results = [], fixtures = [], live = [];
+    let errors = 0;
     for (const lg of LEAGUES) {
         try {
             const done = await j(`https://site.api.espn.com/apis/site/v2/sports/soccer/${lg}/teams/${TEAM_ID}/schedule`);
             const ev = parseEvents(done);
             results.push(...ev.filter((e) => e.state === 'post'));
             live.push(...ev.filter((e) => e.state === 'in'));
-        } catch (e) { console.error('results', lg, e.message); }
+        } catch (e) { errors++; console.error('results', lg, e.message); }
         try {
             const up = await j(`https://site.api.espn.com/apis/site/v2/sports/soccer/${lg}/teams/${TEAM_ID}/schedule?fixture=true`);
             fixtures.push(...parseEvents(up).filter((e) => e.state === 'pre'));
-        } catch (e) { console.error('fixtures', lg, e.message); }
+        } catch (e) { errors++; console.error('fixtures', lg, e.message); }
     }
-    return { results, fixtures, live };
+    return { results, fixtures, live, allFailed: errors === 2 * LEAGUES.length };
 }
 
 const fmtDate = (d) => new Intl.DateTimeFormat('en-US', {
@@ -130,7 +131,9 @@ async function upsertPage(ticker) {
 }
 
 // --- main ---
-const { results, fixtures, live } = await collect();
+const { results, fixtures, live, allFailed } = await collect();
+// Every ESPN request failing is an outage, not an empty schedule: fail so it gets noticed.
+if (allFailed) { console.error('every ESPN request failed — ticker not updated'); process.exit(1); }
 const { ticker } = buildTicker(results, fixtures, live);
 console.log('results:', results.length, '| fixtures:', fixtures.length, '| live:', live.length);
 console.log('ticker string:', ticker || '(empty)');

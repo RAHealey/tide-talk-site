@@ -65,3 +65,4 @@ const excerpt = next.status === 'live' ? next.videoId : next.status === 'upcomin
 if (next.status === current.status && excerpt === current.label) { console.log('unchanged:', next.status); process.exit(0); }
 const r = await fetch(`${POD}/ghost/api/admin/pages/${page.id}/`, { method: 'PUT', headers: GH(), body: JSON.stringify({ pages: [{ updated_at: page.updated_at, title: next.status, custom_excerpt: excerpt }] }) });
 console.log('write', r.status, '->', next.status, excerpt.slice(0, 60));
+if (!r.ok) { console.error(await r.text()); process.exit(1); }
