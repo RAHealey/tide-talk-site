@@ -1,0 +1,39 @@
+name: Checks
+
+# Runs on every PR so a broken change is caught before merge, not on the live
+# site. Tests and theme validation are required; the live-data dry runs depend
+# on ESPN (which sometimes 403s CI runners), so they warn instead of block.
+on:
+  pull_request: {}
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Unit tests
+        run: node --test tools/playoff/test.mjs tools/report-run.test.mjs
+      - name: Syntax-check every tool script
+        run: for f in tools/*.mjs tools/playoff/*.mjs; do node --check "$f"; done
+      - name: Package theme (same as Deploy theme)
+        run: zip -qr tide-talk.zip . -x '.git/*' '.github/*' 'tools/*' 'docs/*' 'out/*' '.cache/*' 'node_modules/*' '*.DS_Store' 'README.md' 'tide-talk.zip'
+      - name: Validate theme with gscan
+        run: npx -y gscan tide-talk.zip -z --fatal
+      - name: Dry run playoff picture (live ESPN data)
+        continue-on-error: true
+        env:
+          DRY_RUN: '1'
+          SIMS: '2000'
+        run: node tools/playoff/publish.mjs
+      - name: Dry run ticker (live ESPN data)
+        continue-on-error: true
+        env:
+          DRY_RUN: '1'
+        run: node tools/update-ticker.mjs

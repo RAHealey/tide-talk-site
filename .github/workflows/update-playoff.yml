@@ -10,6 +10,11 @@ on:
     - cron: '0 */3 * * 0,3,6'
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+  issues: write
+  actions: read
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -23,3 +28,13 @@ jobs:
           GHOST_ADMIN_KEY: ${{ secrets.GHOST_ADMIN_KEY }}
           GHOST_URL: https://casual-macaque.pikapod.net
         run: node tools/playoff/publish.mjs
+      - name: Open or update failure issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node tools/report-run.mjs failure
+      - name: Close failure issue
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node tools/report-run.mjs success

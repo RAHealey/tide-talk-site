@@ -1,0 +1,11 @@
+# Opens PRs when GitHub Actions used by the workflows have new versions
+# (e.g. the checkout/setup-node Node 24 bump). Grouped into one monthly PR.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ['*']
