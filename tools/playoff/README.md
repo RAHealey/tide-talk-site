@@ -23,8 +23,8 @@ fragment, Terrace-styled, scoped under `.pt`) and `out/playoff.preview.html`
 | Step | File | Notes |
 | --- | --- | --- |
 | Data | `espn.mjs` | ESPN has no working USL standings endpoint, so every East club's schedule is pulled under the `all` slug and the table is rebuilt from results. Only `usa.usl.1` regular-season games count. West clubs are fetched too so their strength is known. |
-| Table | `standings.mjs` | Official tiebreakers: points → head-to-head points → head-to-head GD → in-conference PPG → wins → GD → GF. Tied groups restart at head-to-head after a split. |
-| Guarantees | `magic.mjs` | For a target rank k, the smallest total P at which at most k−1 rivals can still reach P. A rival at exactly P counts as ahead unless the season series is finished and RIFC holds the edge. This assumes rivals all win out, so it is a safe upper bound. |
+| Table | `standings.mjs` | Official 2026 tiebreakers: points → East wins → East GD → East goals → head-to-head points → East PPG → non-conference PPG → (disciplinary points, not in ESPN data) → name order as the coin toss. Tied groups restart at East wins after a split. |
+| Guarantees | `magic.mjs` | For a target rank k, the smallest total P at which at most k−1 rivals can still reach P. A rival at exactly P counts as ahead unless RIFC already has more East wins than that rival can still reach. This assumes rivals all win out, so it is a safe upper bound. |
 | Odds | `simulate.mjs` | Poisson goals model: attack/defence = goals for/against per game vs league average, shrunk toward average with a 5-game prior, plus the league's observed home/away split. 20,000 seeded seasons of every remaining East fixture, ranked with the real tiebreakers. |
 | Page | `render.mjs` | Narrative cards, odds tiles, points ladder, East table, remaining fixtures. |
 

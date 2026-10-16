@@ -58,19 +58,20 @@ export function describe({ team, playoff, home, sim, ranked, fixtures }) {
         const needed = neededTotal - home.currentPts;   // points from the games left, same unit as the playoff card
         const available = 3 * home.remaining;           // the most they can still earn
         const shortBy = needed - available;
-        let h2hNote = '';
+        let tieNote = '';
         if (rival) {
-            const { lead, played, scheduled } = rival.h2h;
-            const done = played >= scheduled;
-            if (lead === 'them') h2hNote = done ? ' and <b>owns the head-to-head tiebreaker</b>' : ` and <b>currently leads the head-to-head</b> (${scheduled - played} meeting${scheduled - played === 1 ? '' : 's'} still to play)`;
-            else if (lead === 'us') h2hNote = done ? `, though ${short} own the head-to-head` : `, though ${short} currently lead the head-to-head`;
+            const { us, them, lead } = rival.confWins;
+            const score = `(${Math.max(us, them)}–${Math.min(us, them)})`;
+            if (rival.tieEdge === 'them') tieNote = ` and <b>already owns the first tiebreaker</b>, in-conference wins ${score}`;
+            else if (lead === 'them') tieNote = ` and <b>currently leads on in-conference wins</b> ${score}, the first tiebreaker`;
+            else if (lead === 'us') tieNote = `, though ${short} currently lead on in-conference wins ${score}, the first tiebreaker`;
         }
         cards.push({ label: home.eliminated ? 'Out of reach' : 'Out of reach on their own', tone: home.eliminated ? 'bad' : 'warn', big: String(needed), strike: true,
             stamp: home.eliminated ? 'Eliminated' : 'Needs help',
             headline: home.eliminated ? 'Would have clinched a home playoff game — it can no longer happen.' : 'Would <em>guarantee</em> a home playoff game — but the math doesn\'t work.',
             body: home.eliminated
                 ? `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of the ${needed} it would take. ${home.lockedAbove.length} ${home.lockedAbove.length === 1 ? 'club has' : 'clubs have'} already finished above ${short}'s ceiling${home.lockedAbove.length ? `: ${home.lockedAbove.map(esc).join(', ')}` : ''}. A home playoff game is off the table.`
-                : `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of ${needed}. ${rival ? `${esc(rival.short)} can match ${short}'s ceiling exactly${h2hNote}` : ''} — so even a flawless finish isn't enough on its own. It can still happen with help: simulations give a home playoff game a <b>${pct(p4)}</b> chance.` });
+                : `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of ${needed}. ${rival ? `${esc(rival.short)} can match ${short}'s ceiling exactly${tieNote}` : ''} — so even a flawless finish isn't enough on its own. It can still happen with help: simulations give a home playoff game a <b>${pct(p4)}</b> chance.` });
     }
     return cards;
 }
@@ -265,7 +266,7 @@ ${banner('Remaining fixtures')}
 <ul class="pt-fix">${fixRows}</ul>
 </section>
 
-<p class="pt-foot">Updated ${esc(asOf)}. Standings are rebuilt from ESPN results, regular season only. "Secures" numbers assume every rival wins out and any tie goes against Rhode Island unless the head-to-head series is already decided. Odds use a Poisson goals model with home advantage and no injury or form adjustments.</p>
+<p class="pt-foot">Updated ${esc(asOf)}. Standings are rebuilt from ESPN results, regular season only. "Secures" numbers assume every rival wins out and any tie goes against Rhode Island unless the first tiebreaker, wins against Eastern Conference opponents, is already settled. Odds use a Poisson goals model with home advantage and no injury or form adjustments.</p>
 </div>`;
 }
 

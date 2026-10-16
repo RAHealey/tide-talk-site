@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildTable, rankConference } from './standings.mjs';
-import { clinchNumber, headToHead, winsDecidedTie } from './magic.mjs';
+import { clinchNumber, winsDecidedTie } from './magic.mjs';
 import { parseGames } from './espn.mjs';
 import { simulate, poisson, mulberry32 } from './simulate.mjs';
 import { describe as describeCards } from './render.mjs';
@@ -18,10 +18,24 @@ test('table: points, GD, remaining', () => {
     assert.equal(rows.get('B').pts, 1); assert.equal(rows.get('C').pts, 1); assert.equal(rows.get('C').remaining, 1);
 });
 
-test('tiebreak: head-to-head beats goal difference', () => {
-    const teams = [T('A'), T('B'), T('X')];
-    // A and B both 3 pts. B has the better GD (+4 vs +1) but A won the meeting.
-    const games = [G('A', 'B', 1, 0), G('B', 'X', 5, 0)];
+test('tiebreak: in-conference wins come before head-to-head', () => {
+    const teams = [T('A'), T('B'), T('X'), T('Y'), T('W', 'West')];
+    // A: beat B, lost to X, drew W (West) = 4 pts, 1 East win, East GD 0.
+    // B: lost to A, beat X 4-0, drew Y = 4 pts, 1 East win, East GD +3.
+    // Level on East wins, so East GD decides before head-to-head is reached.
+    const games = [G('A', 'B', 1, 0), G('X', 'A', 1, 0), G('A', 'W', 0, 0),
+        G('B', 'X', 4, 0), G('B', 'Y', 0, 0)];
+    const ranked = rankConference(buildTable(teams, games), games, 'East');
+    // B conf GD +3 vs A 0: B ahead despite losing head-to-head.
+    assert.ok(ranked.findIndex((r) => r.id === 'B') < ranked.findIndex((r) => r.id === 'A'));
+});
+
+test('tiebreak: more in-conference wins beats head-to-head and overall GD', () => {
+    const teams = [T('A'), T('B'), T('X'), T('W', 'West')];
+    // A: 2 East wins = 6 pts. B: beat A + beat W (West) 9-0 = 6 pts, 1 East win.
+    // B owns head-to-head and overall GD, but A has more East wins.
+    const games = [G('A', 'X', 1, 0), G('A', 'X', 1, 0), G('B', 'A', 1, 0), G('X', 'A', 1, 0),
+        G('B', 'W', 9, 0)];
     const ranked = rankConference(buildTable(teams, games), games, 'East');
     assert.deepEqual(ranked.slice(0, 2).map((r) => r.id), ['A', 'B']);
 });
@@ -35,13 +49,16 @@ test('tiebreak: falls to wins then GD when teams have not met', () => {
     assert.equal(ranked[1].id, 'A'); // more wins than B
 });
 
-test('head-to-head bookkeeping', () => {
-    const games = [G('A', 'B', 2, 1), G('B', 'A')];
-    const h = headToHead('A', 'B', games);
-    assert.deepEqual(h, { aPts: 3, bPts: 0, aGd: 1, played: 1, scheduled: 2 });
-    assert.equal(winsDecidedTie('A', 'B', games), false); // series not finished
-    games[1] = G('B', 'A', 0, 0);
-    assert.equal(winsDecidedTie('A', 'B', games), true);
+test('tie only counts as won once in-conference wins are out of reach', () => {
+    const teams = [T('A'), T('B'), T('C')];
+    const games = [G('A', 'C', 1, 0), G('A', 'C', 1, 0), G('B', 'C', 1, 0), G('B', 'C')];
+    const rows = buildTable(teams, games);
+    assert.equal(rows.get('B').confRemaining, 1);
+    assert.equal(winsDecidedTie(rows.get('A'), rows.get('B')), false); // B can still reach 2
+    games[3] = G('B', 'C', 0, 0);
+    const done = buildTable(teams, games);
+    assert.equal(winsDecidedTie(done.get('A'), done.get('B')), true);
+    assert.equal(winsDecidedTie(done.get('B'), done.get('A')), false);
 });
 
 test('magic number: guarantee counts rivals who can still reach the total', () => {
@@ -56,12 +73,12 @@ test('magic number: guarantee counts rivals who can still reach the total', () =
         G('C', 'D', 1, 0), G('C', 'B', 1, 0), // C=3+1=... C beat D (3) + drew A (1) + beat B (3) = 7
         G('A', 'B'), G('C', 'D')]; // one left each for A, B, C, D
     const ranked = rankConference(buildTable(teams, g2), g2, 'East');
-    const m = clinchNumber({ teamId: 'A', ranked, games: g2, k: 2 });
+    const m = clinchNumber({ teamId: 'A', ranked, k: 2 });
     // Rivals' ceilings: B 12, C 10, D 3. A at 10: threats B(12), C(10 tie, undecided)=2 > k-1. At 11: only B -> clinch.
     assert.equal(m.clinchPts, 11); assert.equal(m.magic, 1); assert.equal(m.inOwnHands, true); assert.equal(m.eliminated, false);
-    const m1 = clinchNumber({ teamId: 'A', ranked, games: g2, k: 1 });
+    const m1 = clinchNumber({ teamId: 'A', ranked, k: 1 });
     assert.equal(m1.inOwnHands, true); assert.equal(m1.clinchPts, 13); // needs 13 to beat B's 12
-    const d = clinchNumber({ teamId: 'D', ranked, games: g2, k: 2 });
+    const d = clinchNumber({ teamId: 'D', ranked, k: 2 });
     assert.equal(d.eliminated, true);
 });
 
@@ -99,7 +116,7 @@ const card = (playoff, home, p8 = 0.9, p4 = 0.3) => describeCards({
 const st = { k: 8, currentPts: 29, remaining: 9, maxPts: 56, clinchPts: 46, magic: 17,
     clinched: false, inOwnHands: true, eliminated: false, lockedAbove: [], threats: [] };
 const rival = (short, ceiling) => ({ short, ceiling, pts: 30, remaining: 9, tieEdge: 'open',
-    h2h: { lead: 'them', played: 2, scheduled: 2 } });
+    confWins: { us: 10, them: 12, lead: 'them' } });
 
 test('cards: both numbers are points from the remaining games', () => {
     const [a, b] = card({ ...st }, { ...st, k: 4, inOwnHands: false, clinchPts: null, magic: null,
@@ -140,7 +157,7 @@ test('cards: no unresolved template placeholders in any state', () => {
           threats: [rival('A', 60), rival('B', 55), rival('C', 50), rival('D', 44)] }],
         [{ ...st }, { ...st, k: 4, inOwnHands: false, clinchPts: null, magic: null,
           threats: [rival('A', 69), rival('B', 61), rival('C', 60),
-              { short: 'D', ceiling: 56, pts: 30, remaining: 9, tieEdge: 'us', h2h: { lead: 'us', played: 2, scheduled: 2 } }] }],
+              { short: 'D', ceiling: 56, pts: 30, remaining: 9, tieEdge: 'us', confWins: { us: 14, them: 9, lead: 'us' } }] }],
     ];
     for (const [p, h] of states) for (const c of card(p, h)) {
         assert.doesNotMatch(c.headline + c.body, /\$\{/, `placeholder leaked: ${c.label}`);
