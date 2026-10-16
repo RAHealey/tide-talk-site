@@ -24,8 +24,8 @@ const flag = (name) => process.argv.includes(`--${name}`);
 export async function build({ teams, games, focusId = RIFC_ID, sims = 20000, seed } = {}) {
     const rows = buildTable(teams, games);
     const ranked = rankConference(rows, games, 'East');
-    const playoff = clinchNumber({ teamId: focusId, ranked, games, k: 8 });
-    const home = clinchNumber({ teamId: focusId, ranked, games, k: 4 });
+    const playoff = clinchNumber({ teamId: focusId, ranked, k: 8 });
+    const home = clinchNumber({ teamId: focusId, ranked, k: 4 });
     const sim = simulate({ teams, games, conf: 'East', focusId, sims, seed });
     const confidence = {
         top8_50: pointsForConfidence(sim.focus.byPts, 'pTop8', 0.5),

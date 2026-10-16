@@ -1,22 +1,26 @@
 /**
  * Standings + USL Championship tiebreakers.
  *
- * Official order (uslchampionship.com, Race to the Playoffs):
+ * Order the league switched to in 2026 (USL standings rules; Race to the
+ * Playoffs now cites "the in-conference wins tiebreaker"):
  *   1. Points
- *   2. Head-to-head points among tied clubs
- *   3. Head-to-head goal difference among tied clubs
- *   4. Points per game vs in-conference opponents
- *   5. Total wins
- *   6. Goal difference
- *   7. Goals scored
- * Head-to-head steps only apply when the tied clubs have met; a group that is
- * partially split restarts from step 2 for the remaining tied subgroup.
+ *   2. Wins vs conference opponents
+ *   3. Goal difference vs conference opponents
+ *   4. Goals scored vs conference opponents
+ *   5. Head-to-head points among the tied clubs
+ *   6. Points per game vs conference opponents
+ *   7. Points per game vs non-conference opponents
+ *   8. Fewest disciplinary points (not in ESPN data; skipped)
+ *   9. Coin toss / drawing of lots (we fall back to name order)
+ * A group that is partially split restarts from step 2 for the remaining
+ * tied subgroup.
  */
 
 export function emptyRow(team) {
     return {
         id: team.id, name: team.name, short: team.short, abbr: team.abbr, conf: team.conf, logo: team.logo,
-        gp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0, confGp: 0, confPts: 0, remaining: 0,
+        gp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0, remaining: 0,
+        confGp: 0, confPts: 0, confW: 0, confGf: 0, confGa: 0, confRemaining: 0,
     };
 }
 
@@ -26,7 +30,11 @@ export function buildTable(teams, games) {
     for (const g of games) {
         const h = rows.get(g.homeId), a = rows.get(g.awayId);
         if (!h || !a) continue;
-        if (!g.played) { h.remaining++; a.remaining++; continue; }
+        if (!g.played) {
+            h.remaining++; a.remaining++;
+            if (h.conf === a.conf) { h.confRemaining++; a.confRemaining++; }
+            continue;
+        }
         applyResult(h, a, g.homeGoals, g.awayGoals);
     }
     return rows;
@@ -41,12 +49,16 @@ export function applyResult(h, a, hg, ag) {
     else if (ag > hg) { a.w++; h.l++; hp = 0; ap = 3; }
     else { h.d++; a.d++; }
     h.pts += hp; a.pts += ap;
-    if (sameConf) { h.confGp++; a.confGp++; h.confPts += hp; a.confPts += ap; }
+    if (sameConf) {
+        h.confGp++; a.confGp++; h.confPts += hp; a.confPts += ap;
+        h.confGf += hg; h.confGa += ag; a.confGf += ag; a.confGa += hg;
+        if (hp === 3) h.confW++; else if (ap === 3) a.confW++;
+    }
 }
 
 /** Head-to-head record of `id` against the set of `group` ids, from played games. */
 function h2h(id, groupIds, games) {
-    let pts = 0, gd = 0, met = 0;
+    let pts = 0, met = 0;
     for (const g of games) {
         if (!g.played) continue;
         let mine, theirs;
@@ -54,25 +66,25 @@ function h2h(id, groupIds, games) {
         else if (g.awayId === id && groupIds.has(g.homeId)) { mine = g.awayGoals; theirs = g.homeGoals; }
         else continue;
         met++;
-        gd += mine - theirs;
         pts += mine > theirs ? 3 : mine === theirs ? 1 : 0;
     }
-    return { pts, gd, met };
+    return { pts, met };
 }
 
 const confPPG = (r) => (r.confGp ? r.confPts / r.confGp : 0);
+const nonConfPPG = (r) => (r.gp - r.confGp ? (r.pts - r.confPts) / (r.gp - r.confGp) : 0);
 
 /** Order a group of rows tied on points. Returns rows best-first. */
 function resolveTie(group, games, depth = 0) {
     if (group.length <= 1) return group;
     const ids = new Set(group.map((r) => r.id));
     const keys = [
+        (r) => r.confW,
+        (r) => r.confGf - r.confGa,
+        (r) => r.confGf,
         (r) => h2h(r.id, new Set([...ids].filter((x) => x !== r.id)), games).pts,
-        (r) => h2h(r.id, new Set([...ids].filter((x) => x !== r.id)), games).gd,
         confPPG,
-        (r) => r.w,
-        (r) => r.gd,
-        (r) => r.gf,
+        nonConfPPG,
     ];
     for (let k = 0; k < keys.length; k++) {
         const scored = group.map((r) => ({ r, v: keys[k](r) }));
@@ -85,7 +97,7 @@ function resolveTie(group, games, depth = 0) {
             let j = i;
             while (j < scored.length && scored[j].v === scored[i].v) j++;
             const sub = scored.slice(i, j).map((s) => s.r);
-            // A subgroup that split off restarts at head-to-head (depth guard for safety)
+            // A subgroup that split off restarts at in-conference wins (depth guard for safety)
             out.push(...(sub.length > 1 && depth < 6 ? resolveTie(sub, games, depth + 1) : sub));
             i = j;
         }
