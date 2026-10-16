@@ -66,12 +66,19 @@ export function describe({ team, playoff, home, sim, ranked, fixtures }) {
             else if (lead === 'them') tieNote = ` and <b>currently leads on in-conference wins</b> ${score}, the first tiebreaker`;
             else if (lead === 'us') tieNote = `, though ${short} currently lead on in-conference wins ${score}, the first tiebreaker`;
         }
+        // Name the club that sets the bar: the k-th that can still finish above us.
+        // The tiebreaker only matters when its ceiling equals ours exactly.
+        const ord = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'][home.k - 1];
+        const gap = rival ? rival.ceiling - home.maxPts : 0;
+        const rivalLine = !rival ? ''
+            : gap > 0 ? `${esc(rival.short)}, the ${ord} club that can still finish above ${short}, can reach ${rival.ceiling} points, ${gap} more than ${short}'s best possible ${home.maxPts}`
+            : `${esc(rival.short)}, the ${ord} club that can still finish above ${short}, can match ${short}'s best possible ${home.maxPts} exactly${tieNote}`;
         cards.push({ label: home.eliminated ? 'Out of reach' : 'Out of reach on their own', tone: home.eliminated ? 'bad' : 'warn', big: String(needed), strike: true,
             stamp: home.eliminated ? 'Eliminated' : 'Needs help',
             headline: home.eliminated ? 'Would have clinched a home playoff game — it can no longer happen.' : 'Would <em>guarantee</em> a home playoff game — but the math doesn\'t work.',
             body: home.eliminated
                 ? `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of the ${needed} it would take. ${home.lockedAbove.length} ${home.lockedAbove.length === 1 ? 'club has' : 'clubs have'} already finished above ${short}'s ceiling${home.lockedAbove.length ? `: ${home.lockedAbove.map(esc).join(', ')}` : ''}. A home playoff game is off the table.`
-                : `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of ${needed}. ${rival ? `${esc(rival.short)} can match ${short}'s ceiling exactly${tieNote}` : ''} — so even a flawless finish isn't enough on its own. It can still happen with help: simulations give a home playoff game a <b>${pct(p4)}</b> chance.` });
+                : `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of ${needed}. ${rivalLine} — so even a flawless finish isn't enough on its own. It can still happen with help: simulations give a home playoff game a <b>${pct(p4)}</b> chance.` });
     }
     return cards;
 }

@@ -164,3 +164,20 @@ test('cards: no unresolved template placeholders in any state', () => {
         assert.ok(c.big && c.headline && c.body);
     }
 });
+
+test('cards: a rival with a higher ceiling is not described as matching it', () => {
+    const home = { ...st, k: 4, currentPts: 41, remaining: 2, maxPts: 47, inOwnHands: false, clinchPts: null, magic: null,
+        threats: [rival('A', 61), rival('B', 56), rival('C', 53),
+            { short: 'LOU', ceiling: 49, pts: 40, remaining: 3, tieEdge: 'open', confWins: { us: 9, them: 8, lead: 'us' } }] };
+    const [, b] = card({ ...st }, home);
+    assert.match(b.body, /LOU, the fourth club that can still finish above RIFC, can reach 49 points, 2 more than RIFC's best possible 47/);
+    assert.doesNotMatch(b.body, /match|tiebreaker/);
+});
+
+test('cards: an exact ceiling tie names the tiebreaker', () => {
+    const home = { ...st, k: 4, currentPts: 41, remaining: 2, maxPts: 47, inOwnHands: false, clinchPts: null, magic: null,
+        threats: [rival('A', 61), rival('B', 56), rival('C', 53),
+            { short: 'PIT', ceiling: 47, pts: 41, remaining: 2, tieEdge: 'open', confWins: { us: 9, them: 11, lead: 'them' } }] };
+    const [, b] = card({ ...st }, home);
+    assert.match(b.body, /PIT, the fourth club .* can match RIFC's best possible 47 exactly and <b>currently leads on in-conference wins<\/b> \(11–9\)/);
+});
