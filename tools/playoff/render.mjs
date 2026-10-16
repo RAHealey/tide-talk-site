@@ -35,13 +35,13 @@ export function describe({ team, playoff, home, sim, ranked, fixtures }) {
     if (playoff.clinched) {
         cards.push({ label: 'Clinched', tone: 'good', big: '✓', headline: `${short} have clinched a playoff spot.`, body: `Guaranteed top eight in the East with ${playoff.remaining} to play.` });
     } else if (playoff.eliminated) {
-        cards.push({ label: 'Eliminated', tone: 'bad', big: String(3 * playoff.remaining), strike: true, stamp: 'Eliminated', headline: 'Is every point left, and it still would not be enough.', body: `Even a perfect finish (${playoff.maxPts} points) leaves ${playoff.lockedAbove.length} clubs locked above ${short}.` });
+        cards.push({ label: 'Eliminated', tone: 'bad', big: String(3 * playoff.remaining), strike: true, stamp: 'Eliminated', headline: 'Is every point left, and it still would not be enough.', body: `Winning all ${playoff.remaining} would put ${short} on ${playoff.maxPts} points, still behind ${playoff.lockedAbove.length} clubs: ${playoff.lockedAbove.map(esc).join(', ')}.` });
     } else if (playoff.inOwnHands) {
         cards.push({ label: 'Still achievable', tone: 'good', big: String(playoff.magic),
             headline: 'Secures a playoff spot.',
             body: `That's <b>${winsPhrase(playoff.magic)}</b>, or any combination of results adding up to ${playoff.magic} points, out of the ${playoff.remaining} games left. No help required from anyone else.` });
     } else {
-        cards.push({ label: 'Not in their hands', tone: 'warn', big: String(3 * playoff.remaining), strike: true, stamp: 'Needs help', headline: 'Is every point left, and even that cannot guarantee the top eight.', body: `${short} can reach ${playoff.maxPts} points at most; too many rivals can match it. The playoffs are ${pct(p8)} likely on current form.` });
+        cards.push({ label: 'Not in their hands', tone: 'warn', big: String(3 * playoff.remaining), strike: true, stamp: 'Needs help', headline: 'Is every point left, and even that cannot guarantee the top eight.', body: `Winning all ${playoff.remaining} would put ${short} on ${playoff.maxPts} points, and too many rivals can still match that. The playoffs are ${pct(p8)} likely on current form.` });
     }
 
     // Card 2: home playoff game (top 4)
@@ -68,7 +68,9 @@ export function describe({ team, playoff, home, sim, ranked, fixtures }) {
         cards.push({ label: home.eliminated ? 'Out of reach' : 'Out of reach on their own', tone: home.eliminated ? 'bad' : 'warn', big: String(needed), strike: true,
             stamp: home.eliminated ? 'Eliminated' : 'Needs help',
             headline: home.eliminated ? 'Would have clinched a home playoff game — it can no longer happen.' : 'Would <em>guarantee</em> a home playoff game — but the math doesn\'t work.',
-            body: `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of ${needed}. ${rival ? `${esc(rival.short)} can match ${short}'s ceiling exactly${h2hNote}` : ''} — so even a flawless finish isn't enough on its own. It can still happen with help: simulations give a home playoff game a <b>${pct(p4)}</b> chance.` });
+            body: home.eliminated
+                ? `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of the ${needed} it would take. ${home.lockedAbove.length} ${home.lockedAbove.length === 1 ? 'club has' : 'clubs have'} already finished above ${short}'s ceiling${home.lockedAbove.length ? `: ${home.lockedAbove.map(esc).join(', ')}` : ''}. A home playoff game is off the table.`
+                : `A perfect ${home.remaining}-0 run is worth <b>${available} points</b>, ${shortBy} short of ${needed}. ${rival ? `${esc(rival.short)} can match ${short}'s ceiling exactly${h2hNote}` : ''} — so even a flawless finish isn't enough on its own. It can still happen with help: simulations give a home playoff game a <b>${pct(p4)}</b> chance.` });
     }
     return cards;
 }
